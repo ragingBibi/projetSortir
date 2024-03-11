@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,30 @@ class Event
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $details = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'attendingEventsList')]
+    private Collection $attendeesList;
+
+    #[ORM\ManyToOne(inversedBy: 'organizedEvents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $creator = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Status $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'events')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Venue $venue = null;
+
+    public function __construct()
+    {
+        $this->attendeesList = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +131,81 @@ class Event
     public function setDetails(?string $details): static
     {
         $this->details = $details;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getAttendeesList(): Collection
+    {
+        return $this->attendeesList;
+    }
+
+    public function addAttendeesList(User $attendeesList): static
+    {
+        if (!$this->attendeesList->contains($attendeesList)) {
+            $this->attendeesList->add($attendeesList);
+            $attendeesList->addAttendingEventsList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttendeesList(User $attendeesList): static
+    {
+        if ($this->attendeesList->removeElement($attendeesList)) {
+            $attendeesList->removeAttendingEventsList($this);
+        }
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    public function getStatus(): ?Status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?Status $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getVenue(): ?Venue
+    {
+        return $this->venue;
+    }
+
+    public function setVenue(?Venue $venue): static
+    {
+        $this->venue = $venue;
 
         return $this;
     }
