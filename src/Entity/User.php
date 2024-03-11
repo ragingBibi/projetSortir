@@ -14,10 +14,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue (strategy: 'AUTO')]
     #[ORM\Column]
-    private ?int $id;
+    private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * @var list<string> The user roles
@@ -29,22 +29,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
-    private ?string $password;
+    private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $lastName;
+    private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $firstName;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $phoneNumber;
+    private ?string $phoneNumber = null;
 
     #[ORM\Column]
-    private ?bool $isAdmin;
+    private ?bool $isAdmin = null;
 
     #[ORM\Column]
-    private ?bool $isActive;
+    private ?bool $isActive = null;
 
     public function getId(): ?int
     {
