@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class City
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue (strategy: "AUTO")]
     #[ORM\Column]
     private ?int $id = null;
 
@@ -19,7 +19,7 @@ class City
     private ?string $name = null;
 
     #[ORM\Column(length: 5)]
-    private ?string $zipCode = null;
+    private ?int $zipCode = null;
 
     #[ORM\OneToMany(targetEntity: Venue::class, mappedBy: 'city')]
     private Collection $venues;
@@ -46,12 +46,12 @@ class City
         return $this;
     }
 
-    public function getZipCode(): ?string
+    public function getZipCode(): ?int
     {
         return $this->zipCode;
     }
 
-    public function setZipCode(string $zipCode): static
+    public function setZipCode(int $zipCode): static
     {
         $this->zipCode = $zipCode;
 
