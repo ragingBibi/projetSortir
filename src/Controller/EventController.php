@@ -27,7 +27,7 @@ class EventController extends AbstractController
             $em->persist($event);
             $em->flush();
 
-            $this->addFlash('success', 'Un livre a été enregistré');
+            $this->addFlash('success', 'Evenement enregistré');
             return $this->redirectToRoute('home_home');
         }
 
