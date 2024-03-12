@@ -21,6 +21,7 @@ class EventFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'label' => 'Nom de l\'evenement',
                 'row_attr' => [
                     'class' => 'input-group mb-3'
                 ],
@@ -29,39 +30,58 @@ class EventFormType extends AbstractType
                 ]
             ])
             ->add('startingDateTime', DateTimeType::class, [
+                'label' => 'Date et heure',
                 'widget' => 'single_text',
-                'row_attr' => [
+                'attr' => [
                     'class' => 'input-group mb-3'
                 ]
             ])
             ->add('duration', DateIntervalType::class, [
-                'widget' => 'single_text',
+                'label' => 'Duree',
+                'labels' => [
+                    'days' => 'Jours',
+                    'hours' => 'Heures',
+                    'minutes' => 'Minutes'
+                ],
+                'widget' => 'choice',
+                'with_years' => false,
+                'with_months' => false,
+                'with_days' => true,
+                'with_hours' => true,
+                'hours' => range(1, 24),
+                'with_minutes' => true,
+                'minutes' => range(1, 60),
                 'row_attr' => [
-                    'class' => 'input-group mb-3'
+                    'class' => 'input-group mb-3 duration-fields'
                 ]
             ])
             ->add('maxAttendees', IntegerType::class, [
+                'label' => 'Nombre maximum d\'inscrits',
                 'row_attr' => [
                     'class' => 'input-group mb-3'
                 ]
             ])
             ->add('details', TextType::class,  [
+                'label' => 'Description',
                 'row_attr' => [
                     'class' => 'input-group mb-3'
                 ]
             ])
             ->add('campus', EntityType::class, [
+                'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'multiple' => true,
                 'expanded' => true
             ])
             ->add('venue', EntityType::class, [
+                'label' => 'Lieu',
                 'class' => Venue::class,
                 'choice_label' => 'name'
             ])
+
             ->add('submit', SubmitType::class, [
-                'label' => 'Save'
+                'label' => 'Enregistrer'
             ]);
         ;
     }
