@@ -48,10 +48,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phoneNumber = null;
 
     #[ORM\Column]
-    private ?bool $isAdmin = null;
+    private ?bool $isAdmin = false;
 
     #[ORM\Column]
-    private ?bool $isActive = null;
+    private ?bool $isActive = true;
 
     #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'attendeesList')]
     private Collection $attendingEventsList;
