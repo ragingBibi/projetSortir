@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Campus
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue (strategy: "AUTO")]
     #[ORM\Column]
     private ?int $id = null;
 

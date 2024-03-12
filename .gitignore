@@ -14,14 +14,11 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-###> symfony/phpunit-bridge ###
-/vendor/phpunit
-###< symfony/phpunit-bridge ###
-
 ###> symfony/asset-mapper ###
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/phpstorm,symfony
 # Edit at https://www.toptal.com/developers/gitignore?templates=phpstorm,symfony
@@ -29,8 +26,6 @@
 ### PhpStorm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
-.idea
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -174,14 +169,12 @@ fabric.properties
 !bin/console
 !bin/symfony_requirements
 
-
 # Assets and user uploads
 /web/bundles/
 /web/uploads/
 
 # PHPUnit
 /app/phpunit.xml
-
 
 # Build data
 /build/
@@ -199,5 +192,4 @@ fabric.properties
 /web/css/
 /web/js/
 
-# End of https://www.toptal.com/developers/gitignore/api/phpstorm,symfony
-/.idea/dataSources.xml
+# End of https://www.toptal.com/developers/gitignore/api/phpstorm,symfony.idea 
