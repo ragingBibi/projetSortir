@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EventType extends AbstractType
+class EventFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -56,7 +56,7 @@ class EventType extends AbstractType
                 'multiple' => true,
                 'expanded' => true
             ])
-            ->add('vendue', EntityType::class, [
+            ->add('venue', EntityType::class, [
                 'class' => Venue::class,
                 'choice_label' => 'name'
             ])

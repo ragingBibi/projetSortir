@@ -30,6 +30,7 @@
 {#                        {% endif %}#}
 {#                        {% if is_granted('ROLE_USER') %}#}
                             <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                            <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{ path('event_create') }}">Nouvel évenement</a></li>
 {#                        {% else %}#}
                             <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="{{ path('app_login') }}">Connexion</a></li>
 {#                        {% endif %}#}
