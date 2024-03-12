@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -11,11 +12,11 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route(path: '', name: 'home', methods: ['GET'])]
-    public function home(): Response
+    public function home(EventRepository $eventRepository): Response
     {
-        return $this->render('home/home.html.twig');
+        return $this->render('home/home.html.twig', [
+            'events' => $eventRepository->findAll(),
+        ]);
     }
-
-
 
 }

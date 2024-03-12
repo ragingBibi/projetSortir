@@ -29,15 +29,6 @@ class RegistrationFormType extends AbstractType
                         )
                     ]]
             )
-            ->add('pseudo', TextType::class, [
-                'constraints' => [
-                    /**
-                    new Regex([
-                        'pattern' => '^([a-zA-Z0-9-_@.]{3,20})$',
-                        'message' => 'Le pseudo doit contenir entre 3 et 20 caractères alphanumériques (caractères spéciaux autorisés: . - _ et @)'
-                    ])**/
-                ]
-            ])
             ->add('lastname', TextType::class, [
                 'constraints' => [
                     /*new Regex([

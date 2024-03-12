@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\Status;
 use App\Form\EventFormType;
 use App\Repository\EventRepository;
+use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,24 +17,28 @@ use Symfony\Component\Routing\Attribute\Route;
 //#[IsGranted('ROLE_USER')]
 class EventController extends AbstractController
 {
-    #[Route('/', name: 'app_event_index', methods: ['GET'])]
-    public function index(EventRepository $eventRepository): Response
-    {
-        return $this->render('event/index.html.twig', [
-            'events' => $eventRepository->findAll(),
-        ]);
-    }
 
     #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    public function create(Request $request, EntityManagerInterface $entityManager, StatusRepository $statusRepository): Response
     {
         $event = new Event();
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->persist($event);
-        $entityManager->flush();
+
+            // TODO : Validation de la date de début de l'évennement -> minimum now
+            // TODO : Validation de la date limite d'inscripttion -> maximum date de l'évennement
+            // TODO : Champs obligatoires
+
+            // Associer USER au Creator de l'event
+            $event->setCreator($this->getUser());
+
+            // Status par défaut lors de la création -> Créé
+            $event->setStatus($statusRepository->findOneBy(['label' => 'Créé']));
+
+            $entityManager->persist($event);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Evenement enregistré');
             return $this->redirectToRoute('home_home');
