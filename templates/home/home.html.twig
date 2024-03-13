@@ -41,7 +41,7 @@
                 non
             {% endif %}
         </td>
-        <td>{{ event.creator.pseudo }}</td>
+        <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
         <td>
             <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
             {# TODO : ajouter les actions suivantes #}

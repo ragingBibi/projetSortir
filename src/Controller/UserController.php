@@ -45,6 +45,16 @@ class UserController extends AbstractController
         ]);
     }
 
+    //faire une fonction pour afficher un utilisateur
+
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
+    public function show(User $user): Response
+    {
+        return $this->render('user/show.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     #[Route('/profile/{id}', name: 'app_show_profile', methods: ['GET', 'POST'])]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {

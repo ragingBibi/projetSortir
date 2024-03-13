@@ -3,54 +3,64 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+
+
+    <h1>{{ user.pseudo }}</h1>
+
+    {% if user.picture is not empty %}
+        <img src="{{ asset(uploads ~ '/' ~ user.picture) }}" width="50px"/>
+    {% endif %}
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
-            </tr>
-            <tr>
-                <th>Pseudo</th>
-                <td>{{ user.pseudo }}</td>
-            </tr>
-            <tr>
-                <th>LastName</th>
-                <td>{{ user.lastName }}</td>
-            </tr>
-            <tr>
-                <th>FirstName</th>
-                <td>{{ user.firstName }}</td>
-            </tr>
-            <tr>
-                <th>PhoneNumber</th>
-                <td>{{ user.phoneNumber }}</td>
-            </tr>
-            <tr>
-                <th>IsAdmin</th>
-                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsActive</th>
-                <td>{{ user.isActive ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
+        {#            <tr> #}
+        {#                <th>Id</th> #}
+        {#                <td>{{ user.id }}</td> #}
+        {#            </tr> #}
+        {#            #}
+        {#            <tr> #}
+        {#                <th>Roles</th> #}
+        {#                <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
+        {#            </tr> #}
+        {#            <tr> #}
+        {#                <th>Password</th> #}
+        {#                <td>{{ user.password }}</td> #}
+        {#            </tr> #}
+        {#            <tr> #}
+        {#                <th>Pseudo</th> #}
+        {#                <td>{{ user.pseudo }}</td> #}
+        {#            </tr> #}
+        <tr>
+            <th>Prénom</th>
+            <td>{{ user.firstName }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ user.lastName }}</td>
+        </tr>
+        <tr>
+            <th>Numéro de téléphone</th>
+            <td>{{ user.phoneNumber }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Campus</th>
+            <td>{{ user.campus.name}}</td>
+        {#            <tr> #}
+        {#                <th>IsAdmin</th> #}
+        {#                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td> #}
+        {#            </tr> #}
+        {#            <tr> #}
+        {#                <th>IsActive</th> #}
+        {#                <td>{{ user.isActive ? 'Yes' : 'No' }}</td> #}
+        {#            </tr> #}
+        {#            <tr> #}
+        {#                <th>IsVerified</th> #}
+        {#                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td> #}
+        {#            </tr> #}
         </tbody>
     </table>
 
