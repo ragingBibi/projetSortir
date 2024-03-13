@@ -7,8 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Event
 {
     #[ORM\Id]
@@ -20,15 +22,18 @@ class Event
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan('now', message: 'La date doit être ultérieure au temps actuel')]
     private ?\DateTimeInterface $startingDateTime = null;
 
     #[ORM\Column]
     private ?\DateInterval $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\LessThan(propertyPath: 'startingDateTime', message: 'Cette date ne peut pas être postérieure à la date de l\'évenement')]
     private ?\DateTimeInterface $registrationDeadline = null;
 
     #[ORM\Column]
+    #[Assert\GreaterThan(0, message: 'Le nombre d\'inscrits doit être positif')]
     private ?int $maxAttendees = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -98,6 +103,7 @@ class Event
 
         return $this;
     }
+
 
     public function getRegistrationDeadline(): ?\DateTimeInterface
     {
