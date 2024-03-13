@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\Event;
 use App\Entity\Venue;
+use PHPUnit\Framework\Constraint\GreaterThan;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
@@ -14,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\DateTime;
+use function Symfony\Component\Clock\now;
 
 class EventFormType extends AbstractType
 {
@@ -34,10 +37,11 @@ class EventFormType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'input-group mb-3'
-                ]
+                ],
             ])
             ->add('duration', DateIntervalType::class, [
                 'label' => 'Duree',
+                'required' => true,
                 'labels' => [
                     'days' => 'Jours',
                     'hours' => 'Heures',
