@@ -27,10 +27,6 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // TODO : Validation de la date de début de l'évennement -> minimum now
-            // TODO : Validation de la date limite d'inscripttion -> maximum date de l'évennement
-            // TODO : Champs obligatoires
-
             // Associer USER au Creator de l'event
             $event->setCreator($this->getUser());
 
@@ -44,7 +40,7 @@ class EventController extends AbstractController
             return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
-        return $this->render('home/create.html.twig', [
+        return $this->render('event/create.html.twig', [
             'create_event_form' => $form
         ]);
     }
@@ -70,10 +66,10 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('event_details', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('event/edit.html.twig', [
+        return $this->render('event/update.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
@@ -87,6 +83,6 @@ class EventController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
 }
