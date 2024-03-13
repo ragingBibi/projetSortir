@@ -61,6 +61,13 @@ class EventFormType extends AbstractType
                     'class' => 'input-group mb-3'
                 ]
             ])
+            ->add('registrationDeadline', DateTimeType::class, [
+                'label' => 'Date limite d\'inscription',
+                'widget' => 'single_text',
+                'row_attr' => [
+                    'class' => 'input-group mb-3'
+                ]
+            ])
             ->add('details', TextType::class,  [
                 'label' => 'Description',
                 'row_attr' => [
@@ -69,13 +76,14 @@ class EventFormType extends AbstractType
             ])
             ->add('campus', EntityType::class, [
                 'label' => 'Campus',
+                'placeholder' => '-- Choisir un campus --',
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => true
+                'multiple' => false,
             ])
             ->add('venue', EntityType::class, [
                 'label' => 'Lieu',
+                'placeholder' => '-- Choisir un lieu --',
                 'class' => Venue::class,
                 'choice_label' => 'name'
             ])

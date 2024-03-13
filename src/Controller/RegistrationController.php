@@ -36,6 +36,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $user->setPseudo($user->getFirstName().'.'.$user->getLastName());
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -46,8 +49,8 @@ class RegistrationController extends AbstractController
             );
 
             //pour passer le admin
-                /*$user->setIsAdmin(false);
-            $user->setIsActive(true);*/
+            /*$user->setIsAdmin(false);
+        $user->setIsActive(true);*/
             $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
             $entityManager->flush();
@@ -61,7 +64,13 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
+            //TODO : Créer un sender pour envoyer un email à l'utilisateur nouvellement créé
             // do anything else you need here, like send an email
+//           $text = 'Bonjour ' . $user->getFirstName() . ' ! Bienvenue sur Jet:Lagged:Brains. Pour vous connecter sur Jet:Lagged:Brains,
+//           veuillez saisir votre adresse Email et comme mot de passe la premiere lettre de votre prenom attaché à votre nom. A votre première connexion,
+//             veuillez modifier votre mot de passe et votre pseudo.';
+//            $sender->sendEmail('Nouvelle inscription sur Amazooz', $text, 'admin@amazooz.com');
+//            $sender->sendEmail('Bienvenue sur Amazooz', 'Voila, voila...', $user->getEmail());
 
             return $security->login($user, AppAuthenticator::class, 'main');
         }
