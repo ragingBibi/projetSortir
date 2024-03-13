@@ -12,7 +12,7 @@
         <th scope="col">Clôture</th>
         <th scope="row">Inscrits / Places</th>
         <th scope="col">Etat</th>
-        <th scope="col">Incrit</th>
+        <th scope="col">Inscrit</th>
         <th scope="col">Organisateur</th>
         <th scope="col">Actions</th>
     </tr>
@@ -44,12 +44,21 @@
         <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
         <td>
             <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
-            {# TODO : ajouter les actions suivantes #}
-            <a href="">Modifier</a>
-            <a href="">Publier</a>
-            <a href="">Annuler</a>
-            <a href="">S'inscrire</a>
-            <a href="">Se désister</a>
+            {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
+                <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
+                {# TODO : ajouter les actions suivantes #}
+                {% if event.status.label != 'Ouvert' %}
+                <a href="">Publier</a>
+                <a href="">Annuler</a>
+                {% endif %}
+            {% endif %}
+            {% if event.creator.id != app.user.id %}
+                {% if app.user in event.attendeesList %}
+                    <a href="">Se désister</a>
+                {% else %}
+                    <a href="">S'inscrire</a>
+                {% endif %}
+            {% endif %}
         </td>
     </tr>
     {% endfor %}

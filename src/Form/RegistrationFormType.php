@@ -38,6 +38,8 @@ class RegistrationFormType extends AbstractType
             )
             ->add('picture_file', FileType::class, [
                 'label' => 'Photo de profil',
+                'row_attr' => [
+                    'class' => 'col-md-2 mb-3'],
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
