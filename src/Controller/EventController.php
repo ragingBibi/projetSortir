@@ -27,9 +27,6 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // TODO : Validation de la date limite d'inscripttion -> maximum date de l'évennement
-            // TODO : Champs obligatoires
-
             // Associer USER au Creator de l'event
             $event->setCreator($this->getUser());
 
