@@ -4,4 +4,56 @@
 
 {% block body %}
 
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Nom de la sortie</th>
+        <th scope="col">Date de la sortie</th>
+        <th scope="col">Clôture</th>
+        <th scope="row">Inscrits / Places</th>
+        <th scope="col">Etat</th>
+        <th scope="col">Incrit</th>
+        <th scope="col">Organisateur</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {# Itération sur la liste des events #}
+    {%  for event in events %}
+    <tr>
+        <td>{{ event.name }}</td>
+        <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
+        <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
+        <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
+        <td>{{ event.status.label }}</td>
+        {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
+        <td>
+            {% if app.user is same as(event.creator) %}
+
+               <p>Auteur</p>
+
+            {% elseif app.user in event.attendeesList %}
+
+                <p>x</p>
+
+            {% else %}
+
+                non
+            {% endif %}
+        </td>
+        <td>{{ event.creator.pseudo }}</td>
+        <td>
+            <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
+            {# TODO : ajouter les actions suivantes #}
+            <a href="">Modifier</a>
+            <a href="">Publier</a>
+            <a href="">Annuler</a>
+            <a href="">S'inscrire</a>
+            <a href="">Se désister</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
