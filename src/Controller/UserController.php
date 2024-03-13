@@ -48,7 +48,7 @@ class UserController extends AbstractController
     #[Route('/profile/{id}', name: 'app_show_profile', methods: ['GET', 'POST'])]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
@@ -68,11 +68,12 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/edit.html.twig', [
-            'form' => $form
+            'form' => $form,
+            'user' => $user
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+/*    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UserType::class, $user);
@@ -88,7 +89,7 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form,
         ]);
-    }
+    }*/
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
