@@ -41,7 +41,7 @@ class EventController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Evenement enregistré');
-            return $this->redirectToRoute('home_home');
+            return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
         return $this->render('home/create.html.twig', [
@@ -50,40 +50,43 @@ class EventController extends AbstractController
     }
 
 
-//    #[Route('/{id}', name: 'detail', methods: ['GET'])]
-//    public function detail(Event $event): Response
-//    {
-//        return $this->render('home/detail.html.twig', [
-//            'event' => $event,
-//        ]);
-//    }
-//
-//    #[Route('/{id}/modifier', name: 'update', methods: ['GET', 'POST'])]
-//    public function update(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-//    {
-//        $form = $this->createForm(EventType::class, $event);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $entityManager->flush();
-//
-//            return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
-//        }
-//
-//        return $this->render('event/edit.html.twig', [
-//            'event' => $event,
-//            'form' => $form,
-//        ]);
-//    }
-//
-//    #[Route('/{id}', name: 'delete', methods: ['POST'])]
-//    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-//    {
-//        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-//            $entityManager->remove($event);
-//            $entityManager->flush();
-//        }
-//
-//        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
-//    }
+    #[Route('/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function detail(Event $event): Response
+    {
+        $attendees = $event->getAttendeesList();
+
+        return $this->render('event/details.html.twig', [
+            'event' => $event,
+            'attendees' => $attendees
+        ]);
+    }
+
+    #[Route('/{id}/modifier', name: 'update', methods: ['GET', 'POST'])]
+    public function update(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(EventFormType::class, $event);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('event/edit.html.twig', [
+            'event' => $event,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($event);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_event_index', [], Response::HTTP_SEE_OTHER);
+    }
 }
