@@ -13,7 +13,8 @@
 
     {{ form_start(registrationForm) }}
 
-    {{ form_row(registrationForm.lastname, { label: 'Nom' }) }}
+    {{ form_row(registrationForm.pseudo, { label: 'Pseudo' }) }}
+    {{ form_row(registrationForm.lastName, { label: 'Nom' }) }}
     {{ form_row(registrationForm.firstName, { label: 'Prénom' }) }}
     {{ form_row(registrationForm.phoneNumber, { label: 'N° de téléphone' }) }}
         {{ form_row(registrationForm.email, { label: 'Email' }) }}
@@ -22,6 +23,5 @@
         }) }}
     {{ form_row(registrationForm.campus) }}
 
-        <button type="submit" class="btn">S'enregistrer</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

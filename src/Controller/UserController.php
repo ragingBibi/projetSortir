@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\RegistrationFormType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
-#[Route('/user')]
+#[Route(path: '/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
@@ -42,11 +45,30 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
+    #[Route('/profile/{id}', name: 'app_show_profile', methods: ['GET', 'POST'])]
+    public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            if($form->get('picture_file')->getData() instanceof UploadedFile) {
+                $pictureFile = $form->get('picture_file')->getData();
+                $fileName = $slugger->slug($user->getLastName()) . '-' . uniqid() . '.' . $pictureFile->guessExtension();
+                $pictureFile->move('uploads', $fileName);
+                $user->setPicture($fileName);
+
+            }
+            $em->persist($user);
+            $em->flush();
+
+            $this->addFlash('success text-center', 'Votre profil a bien été mis à jour');
+            return $this->redirectToRoute('app_show_profile', ['id' => $user->getId()]);
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'form' => $form
         ]);
     }
 
