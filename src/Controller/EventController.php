@@ -3,18 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\Status;
 use App\Form\EventFormType;
-use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/event', name: 'event_')]
-//#[IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_USER')]
 class EventController extends AbstractController
 {
 
@@ -36,7 +35,7 @@ class EventController extends AbstractController
             $entityManager->persist($event);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Evenement enregistré');
+            $this->addFlash('success', 'L\'évènement a été enregistré');
             return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
@@ -67,7 +66,7 @@ class EventController extends AbstractController
             $entityManager->persist($event);
             $entityManager->flush();
 
-            $this->addFlash('success', 'L\évenement a été modifié');
+            $this->addFlash('success', 'L\'évènement a été modifié');
             return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
@@ -77,16 +76,4 @@ class EventController extends AbstractController
         ]);
     }
 
-//    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-//    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-//    {
-//        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-//            $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
-//        }
-//
-//        $entityManager->persist($event);
-//        $this->addFlash('success', 'L\évenement est annulé');
-//
-//        return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
-//    }
 }

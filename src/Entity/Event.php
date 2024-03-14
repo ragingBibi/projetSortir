@@ -58,6 +58,9 @@ class Event
     #[ORM\JoinColumn(nullable: false)]
     private ?Venue $venue = null;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $annulationDate = null;
+
     public function __construct()
     {
         $this->attendeesList = new ArrayCollection();
@@ -212,6 +215,18 @@ class Event
     public function setVenue(?Venue $venue): static
     {
         $this->venue = $venue;
+
+        return $this;
+    }
+
+    public function getAnnulationDate(): ?\DateTimeInterface
+    {
+        return $this->annulationDate;
+    }
+
+    public function setAnnulationDate(?\DateTimeInterface $annulationDate): static
+    {
+        $this->annulationDate = $annulationDate;
 
         return $this;
     }

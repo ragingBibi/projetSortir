@@ -53,7 +53,9 @@
                     <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
                     {# TODO : ajouter les actions suivantes #}
                     {% if event.status.label != 'Ouvert' %}
-                    <a href="">Publier</a>
+                        {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}
+                            <a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a>
+                        {% endif %}
                     <a href="">Annuler</a>
                     {% endif %}
                 {% endif %}

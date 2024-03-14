@@ -7,6 +7,10 @@
     <table class="table">
         <tbody>
             <tr>
+                <th>Status</th>
+                <td>{{ event.status.label }}</td>
+            </tr>
+            <tr>
                 <th>Date et heure de l'évenement</th>
                 <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
             </tr>
@@ -46,7 +50,7 @@
         {% endif %}
         {% if is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
             <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
-{#            <button><a href="{{ path('event_delete', {'id': event.id}) }}">Supprimer</a></button>#}
+{#            <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>#}
         {% endif %}
     </div>
 
