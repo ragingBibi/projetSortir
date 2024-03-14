@@ -68,8 +68,8 @@ class UserController extends AbstractController
                 $fileName = $slugger->slug($user->getLastName()) . '-' . uniqid() . '.' . $pictureFile->guessExtension();
                 $pictureFile->move('uploads', $fileName);
                 $user->setPicture($fileName);
-
             }
+
             $em->persist($user);
             $em->flush();
 
