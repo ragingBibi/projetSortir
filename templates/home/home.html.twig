@@ -68,7 +68,7 @@
 {#                Si pas créateur et pas inscrit et event publié on peut s'inscrire#}
                 {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
                     {% if app.user in event.attendeesList %}
-                        <a href="">Se désister</a>
+                        <a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a>
                     {% else %}
                         <a href="{{ path('event_subscribe', {'id': event.id}) }}" >S'inscrire</a>
                     {% endif %}

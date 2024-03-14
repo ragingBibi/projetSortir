@@ -166,10 +166,11 @@ class Event
         return $this;
     }
 
-    public function removeAttendeesList(User $attendeesList): static
+    public function removeUserFromAttendeesList(User $user): static
     {
-        if ($this->attendeesList->removeElement($attendeesList)) {
-            $attendeesList->removeAttendingEventsList($this);
+        if ($this->attendeesList->contains($user)){
+            $this->attendeesList->removeElement($user);
+            $user->removeAttendingEventsList($this);
         }
 
         return $this;
