@@ -62,6 +62,9 @@ class Event
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $cancellationDate = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancellationReason = null;
+
     public function __construct()
     {
         $this->attendeesList = new ArrayCollection();
@@ -229,6 +232,18 @@ class Event
     public function setCancellationDate(?\DateTimeInterface $cancellationDate): static
     {
         $this->cancellationDate = $cancellationDate;
+
+        return $this;
+    }
+
+    public function getCancellationReason(): ?string
+    {
+        return $this->cancellationReason;
+    }
+
+    public function setCancellationReason(?string $cancellationReason): static
+    {
+        $this->cancellationReason = $cancellationReason;
 
         return $this;
     }
