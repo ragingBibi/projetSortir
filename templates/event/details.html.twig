@@ -71,13 +71,6 @@
         </tbody>
     </table>
 
-    <div>
-        {% if is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
-        <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
-        <button><a href="{{ path('event_delete', {'id': event.id}) }}">Supprimer</a></button>
-        {% endif %}
-    </div>
-
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 
 {% endblock %}
