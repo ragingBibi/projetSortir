@@ -12,7 +12,6 @@
         {{ form(update_event_form) }}
     </div>
 
-    TODO : ajouter les actions suivantes
     <div>
         <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
         {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}

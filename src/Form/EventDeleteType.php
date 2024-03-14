@@ -14,6 +14,7 @@ class EventDeleteType extends AbstractType
         $builder
             ->add('cancellationReason', TextType::class,  [
                 'label' => 'Motif de l\'annulation',
+                'required' => true,
                 'row_attr' => [
                     'class' => 'input-group mb-3'
                 ]

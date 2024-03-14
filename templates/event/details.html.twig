@@ -55,6 +55,7 @@
             {% endif %}
         {% endif %}
         {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
+            <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
             <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
             <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
         {% endif %}

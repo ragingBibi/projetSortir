@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\EventDeleteType;
-use App\Form\EventFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

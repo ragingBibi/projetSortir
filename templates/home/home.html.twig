@@ -50,19 +50,16 @@
             <td>
                 <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
 
-{#                Modification, publication et annulation autorisée pour créateur et admin#}
-                {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
+{#                Modification, publication et annulation autorisée pour créateur et admin si pas déjà annulé#}
+                {% if (event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
 
 {#                    Si event pas publié ou annulé on peut publier#}
                     {% if event.status.label == 'Créé' %}
                         <a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a>
                     {% endif %}
 
-{#                    Si l'event est annulé on ne peut pas modifier ni annuler#}
-                    {% if event.status.label != 'Annulé' %}
-                        <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
-                        <a href="{{ path('status_delete', {'id': event.id}) }}">Annuler</a>
-                    {% endif %}
+                    <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
+                    <a href="{{ path('status_delete', {'id': event.id}) }}">Annuler</a>
                 {% endif %}
 
 {#                Si pas créateur et pas inscrit et event publié on peut s'inscrire#}
