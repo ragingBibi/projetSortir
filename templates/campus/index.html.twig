@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sites {% endblock %}
+
+{% block pageName %}Liste des sites{% endblock %}
+
+{% block body %}
+       <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for campus in campuses %}
+            <tr>
+                <td>{{ campus.id }}</td>
+                <td>{{ campus.name }}</td>
+                <td>
+
+                    <a href="{{ path('app_campus_edit', {'id': campus.id}) }}"> Modifier </a>
+                    <a href="{{ path('app_campus_delete', {'id': campus.id}) }}"> Supprimer </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary"  href="{{ path('app_campus_new') }}"> Nouveau site</a>
+{% endblock %}

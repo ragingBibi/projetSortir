@@ -7,14 +7,16 @@ use App\Entity\Status;
 use App\Form\EventFormType;
 use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/event', name: 'event_')]
-//#[IsGranted('ROLE_USER')]
+#[IsGranted('ROLE_USER')]
 class EventController extends AbstractController
 {
 
@@ -36,7 +38,7 @@ class EventController extends AbstractController
             $entityManager->persist($event);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Evenement enregistré');
+            $this->addFlash('success', 'L\'évènement a été enregistré');
             return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
@@ -58,31 +60,75 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}/modifier', name: 'update', methods: ['GET', 'POST'])]
-    public function update(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    public function updateEvent(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($event);
             $entityManager->flush();
 
-            return $this->redirectToRoute('event_details', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\'évènement a été modifié');
+            return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
         return $this->render('event/update.html.twig', [
             'event' => $event,
-            'form' => $form,
+            'update_event_form' => $form,
         ]);
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $entityManager->remove($event);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
+//TODO : s'assurer que le nombre limite d'inscrits ne dépasse pas le maxattendees
+    //s'inscrire à un évenement par pression d'un bouton, ajout de l'utilisateur dans la liste des participants event.attendeesList
+    #[Route('/{id}/subscribe', name: 'subscribe', methods: ['POST', 'GET'])]
+    public function subscribe(Event $event, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        //on récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+        //on recherche via le repository l'utilisateur qui correspond à l'email de l'utilisateur connecté
+        // et on le stocke dans $user pour avoir un objet de type User
+        $user = $userRepository->findOneBy(['email' => $userConnected->getEmail()]);
+        //on ajoute l'utilisateur dans la liste des participants
+        $event->addUserToAttendeesList($user);
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+        //on affiche dans le détail de l'évènement qui détaille la liste des participants
+        return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+    }
+
+    //se désinscire à un évenement par pression d'un bouton, enlève l'utilisateur de la liste des participants event.attendeesList
+    #[Route('/{id}/unsubscribe', name: 'unsubscribe', methods: ['POST', 'GET'])]
+    public function unsubcribe(Event $event, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        //on récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+        //on recherche via le repository l'utilisateur qui correspond à l'email de l'utilisateur connecté
+        // et on le stocke dans $user pour avoir un objet de type User
+        $user = $userRepository->findOneBy(['email' => $userConnected->getEmail()]);
+        //on enlémentine l'utilisateur de la liste des participants
+        $event->removeUserFromAttendeesList($user);
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Vous êtes désinscrit de l\'évènement');
+        //on affiche dans le détail de l'évènement qui détaille la liste des participants
+        return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+
+    }
+
 }

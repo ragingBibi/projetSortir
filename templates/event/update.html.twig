@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% form_theme update_event_form 'bootstrap_5_layout.html.twig' %}
+
+{% block title %}Modifier un évènement{% endblock %}
+
+{% block pageName %}Modifier un évenement{% endblock %}
+
+{% block body %}
+
+    <div class="flex justify-content">
+        {{ form(update_event_form) }}
+    </div>
+
+    TODO : ajouter les actions suivantes
+    <div>
+        <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
+        {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}
+            <button type="submit"><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+        {% endif %}
+    </div>
+
+    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+
+{% endblock %}

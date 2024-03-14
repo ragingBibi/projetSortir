@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use App\Security\AppAuthenticator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -57,6 +58,12 @@ class Event
     #[ORM\ManyToOne(inversedBy: 'events')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Venue $venue = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $cancellationDate = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancellationReason = null;
 
     public function __construct()
     {
@@ -149,20 +156,21 @@ class Event
         return $this->attendeesList;
     }
 
-    public function addAttendeesList(User $attendeesList): static
+    public function addUserToAttendeesList(User $user): static
     {
-        if (!$this->attendeesList->contains($attendeesList)) {
-            $this->attendeesList->add($attendeesList);
-            $attendeesList->addAttendingEventsList($this);
+        if (!$this->attendeesList->contains($user)) {
+            $this->attendeesList->add($user);
+            $user->addAttendingEventsList($this);
         }
 
         return $this;
     }
 
-    public function removeAttendeesList(User $attendeesList): static
+    public function removeUserFromAttendeesList(User $user): static
     {
-        if ($this->attendeesList->removeElement($attendeesList)) {
-            $attendeesList->removeAttendingEventsList($this);
+        if ($this->attendeesList->contains($user)){
+            $this->attendeesList->removeElement($user);
+            $user->removeAttendingEventsList($this);
         }
 
         return $this;
@@ -212,6 +220,30 @@ class Event
     public function setVenue(?Venue $venue): static
     {
         $this->venue = $venue;
+
+        return $this;
+    }
+
+    public function getCancellationDate(): ?\DateTimeInterface
+    {
+        return $this->cancellationDate;
+    }
+
+    public function setCancellationDate(?\DateTimeInterface $cancellationDate): static
+    {
+        $this->cancellationDate = $cancellationDate;
+
+        return $this;
+    }
+
+    public function getCancellationReason(): ?string
+    {
+        return $this->cancellationReason;
+    }
+
+    public function setCancellationReason(?string $cancellationReason): static
+    {
+        $this->cancellationReason = $cancellationReason;
 
         return $this;
     }

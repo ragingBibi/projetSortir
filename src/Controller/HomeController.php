@@ -28,7 +28,7 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
 
         return $this->render('home/home.html.twig', [
-            //on récupeère tous les events créés
+            //on récupère tous les events créés
             'events' => $eventRepository->findAll(),
             //On passe le formulaire de recherche à la vue
             'form' => $form->createView()
