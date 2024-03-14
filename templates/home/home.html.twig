@@ -12,9 +12,11 @@
         <th scope="col">Clôture</th>
         <th scope="row">Inscrits / Places</th>
         <th scope="col">Etat</th>
-        <th scope="col">Inscrit</th>
         <th scope="col">Organisateur</th>
-        <th scope="col">Actions</th>
+        {% if is_granted('ROLE_USER') %}
+            <th scope="col">Inscrit</th>
+            <th scope="col">Actions</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -26,40 +28,44 @@
         <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
         <td>{{ event.status.label }}</td>
-        {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
-        <td>
-            {% if app.user is same as(event.creator) %}
+        <td>{{ event.creator.pseudo }}</td>
 
-               <p>Auteur</p>
+        {% if is_granted('ROLE_USER') %}
+            {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
+            <td>
+                {% if app.user is same as(event.creator) %}
 
-            {% elseif app.user in event.attendeesList %}
+                    <p>Auteur</p>
 
-                <p>x</p>
+                {% elseif app.user in event.attendeesList %}
 
-            {% else %}
+                    <p>x</p>
 
-                non
-            {% endif %}
-        </td>
-        <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
-        <td>
-            <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
-            {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
-                <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
-                {# TODO : ajouter les actions suivantes #}
-                {% if event.status.label != 'Ouvert' %}
-                <a href="">Publier</a>
-                <a href="">Annuler</a>
-                {% endif %}
-            {% endif %}
-            {% if event.creator.id != app.user.id %}
-                {% if app.user in event.attendeesList %}
-                    <a href="">Se désister</a>
                 {% else %}
-                    <a href="">S'inscrire</a>
+
+                    non
                 {% endif %}
-            {% endif %}
-        </td>
+            </td>
+
+            <td>
+                <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
+                {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
+                    <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
+                    {# TODO : ajouter les actions suivantes #}
+                    {% if event.status.label != 'Ouvert' %}
+                    <a href="">Publier</a>
+                    <a href="">Annuler</a>
+                    {% endif %}
+                {% endif %}
+                {% if event.creator.id != app.user.id %}
+                    {% if app.user in event.attendeesList %}
+                        <a href="">Se désister</a>
+                    {% else %}
+                        <a href="">S'inscrire</a>
+                    {% endif %}
+                {% endif %}
+            </td>
+        {% endif %}
     </tr>
     {% endfor %}
     </tbody>
