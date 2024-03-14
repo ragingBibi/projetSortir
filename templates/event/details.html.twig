@@ -37,7 +37,7 @@
     </table>
 
     <div>
-        <button><a>S'inscrire</a></button>
+        <button><a href="{{ path('event_subscribe', {'id': event.id})}}">S'inscrire</a></button>
         <button><a>Se désister</a></button>
     </div>
 
@@ -46,7 +46,7 @@
         <tbody>
             {% for attendee in attendees %}
                 <tr>
-                    <td>{{ attendee }}</td>
+                    <td>{{ attendee.pseudo }}</td>
                 </tr>
             {% endfor %}
         </tbody>

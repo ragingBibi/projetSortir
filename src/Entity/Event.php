@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EventRepository;
+use App\Security\AppAuthenticator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -149,11 +150,11 @@ class Event
         return $this->attendeesList;
     }
 
-    public function addAttendeesList(User $attendeesList): static
+    public function addUserToAttendeesList(User $user): static
     {
-        if (!$this->attendeesList->contains($attendeesList)) {
-            $this->attendeesList->add($attendeesList);
-            $attendeesList->addAttendingEventsList($this);
+        if (!$this->attendeesList->contains($user)) {
+            $this->attendeesList->add($user);
+            $user->addAttendingEventsList($this);
         }
 
         return $this;

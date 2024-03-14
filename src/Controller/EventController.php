@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Status;
+use App\Entity\User;
 use App\Form\EventFormType;
 use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -78,11 +80,29 @@ class EventController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $entityManager->remove($event);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
+
+    //s'inscrire à un évenement par pression d'un bouton, ajout de l'utilisateur dans la liste des participants event.attendeesList
+    #[Route('/{id}/subscribe', name: 'subscribe', methods: ['POST', 'GET'])]
+    public function subscribe(Event $event, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        //on récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+        //on recherche via le repository l'utilisateur qui correspond à l'email de l'utilisateur connecté
+        // et on le stocke dans $user pour avoir un objet de type User
+        $user = $userRepository->findOneBy(['email' => $userConnected->getEmail()]);
+        //on ajoute l'utilisateur dans la liste des participants
+        $event->addUserToAttendeesList($user);
+        $entityManager->persist($event);
+        $entityManager->flush();
+        //on affiche dans le détail de l'évènement qui détaille la liste des participants
+        return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+    }
+
 }

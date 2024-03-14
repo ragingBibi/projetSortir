@@ -61,7 +61,7 @@
                     {% if app.user in event.attendeesList %}
                         <a href="">Se désister</a>
                     {% else %}
-                        <a href="">S'inscrire</a>
+                        <a href="{{ path('event_subscribe', {'id': event.id}) }}" >S'inscrire</a>
                     {% endif %}
                 {% endif %}
             </td>
