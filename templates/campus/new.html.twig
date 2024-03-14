@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau site{% endblock %}
+{% block pageName %}Créer un nouvau site {% endblock %}
+
+{% block body %}
+
+    {{ include('campus/_form.html.twig') }}
+
+    <a href="{{ path('app_campus_index') }}"> Retour à la liste </a>
+{% endblock %}
