@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau lieu {% endblock %}
+{% block pageName %}Créer un nouveau lieu d'événement{% endblock %}
+
+{% block body %}
+
+
+    {{ include('venue/_form.html.twig') }}
+
+    <a href="{{ path('app_venue_index') }}">Retour à la liste</a>
+{% endblock %}

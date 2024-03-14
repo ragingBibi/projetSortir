@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ville {% endblock %}
+{% block pageName %}Ville : {{ city.name }}{% endblock %}
+
+{% block body %}
+
+    <table class="table table-striped">>
+        <tbody>
+            <tr>
+                <th scope="col">Id</th>
+                <td>{{ city.id }}</td>
+            </tr>
+            <tr>
+                <th scope="col">Nom</th>
+                <td>{{ city.name }}</td>
+            </tr>
+            <tr>
+                <th scope="col">Code postal </th>
+                <td>{{ city.zipCode }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_city_edit', {'id': city.id}) }}"> Modifier </a>
+    <br>
+    <a href="{{ path('app_city_index') }}">Retour à la liste</a>
+
+
+
+    {{ include('city/_delete_form.html.twig') }}
+{% endblock %}
