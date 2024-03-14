@@ -31,7 +31,7 @@
                                                      href="{{ path('home_home') }}">Accueil</a></li>
                 {% if is_granted('IS_AUTHENTICATED') %}
                     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
-                                                         href="{{ path('app_show_profile', { 'id': app.user.id }) }}">Mon
+                                                         href="{{ path('app_edit_profile', { 'id': app.user.id }) }}">Mon
                             profil</a></li>
 
                 {% endif %}
