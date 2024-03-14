@@ -21,7 +21,7 @@ class HomeController extends AbstractController
         $user = $this->getUser();
 
         return $this->render('home/home.html.twig', [
-            //on récupeère tous les events créés
+            //on récupère tous les events créés
             'events' => $eventRepository->findAll(),
         ]);
     }

@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class EventController extends AbstractController
 {
 
-    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    #[Route('/create', name: 'create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager, StatusRepository $statusRepository): Response
     {
         $event = new Event();
@@ -58,31 +58,35 @@ class EventController extends AbstractController
     }
 
     #[Route('/{id}/modifier', name: 'update', methods: ['GET', 'POST'])]
-    public function update(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+    public function updateEvent(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($event);
             $entityManager->flush();
 
-            return $this->redirectToRoute('event_details', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'L\évenement a été modifié');
+            return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
         }
 
         return $this->render('event/update.html.twig', [
             'event' => $event,
-            'form' => $form,
+            'update_event_form' => $form,
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($event);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
-    }
+//    #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
+//    public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+//            $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
+//        }
+//
+//        $entityManager->persist($event);
+//        $this->addFlash('success', 'L\évenement est annulé');
+//
+//        return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
+//    }
 }

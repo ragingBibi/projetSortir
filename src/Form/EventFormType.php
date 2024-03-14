@@ -91,7 +91,6 @@ class EventFormType extends AbstractType
                 'class' => Venue::class,
                 'choice_label' => 'name'
             ])
-
             ->add('submit', SubmitType::class, [
                 'label' => 'Enregistrer'
             ]);
