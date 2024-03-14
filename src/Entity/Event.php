@@ -60,7 +60,7 @@ class Event
     private ?Venue $venue = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $annulationDate = null;
+    private ?\DateTimeInterface $cancellationDate = null;
 
     public function __construct()
     {
@@ -163,10 +163,11 @@ class Event
         return $this;
     }
 
-    public function removeAttendeesList(User $attendeesList): static
+    public function removeUserFromAttendeesList(User $user): static
     {
-        if ($this->attendeesList->removeElement($attendeesList)) {
-            $attendeesList->removeAttendingEventsList($this);
+        if ($this->attendeesList->contains($user)){
+            $this->attendeesList->removeElement($user);
+            $user->removeAttendingEventsList($this);
         }
 
         return $this;
@@ -220,14 +221,14 @@ class Event
         return $this;
     }
 
-    public function getAnnulationDate(): ?\DateTimeInterface
+    public function getCancellationDate(): ?\DateTimeInterface
     {
-        return $this->annulationDate;
+        return $this->cancellationDate;
     }
 
-    public function setAnnulationDate(?\DateTimeInterface $annulationDate): static
+    public function setCancellationDate(?\DateTimeInterface $cancellationDate): static
     {
-        $this->annulationDate = $annulationDate;
+        $this->cancellationDate = $cancellationDate;
 
         return $this;
     }
