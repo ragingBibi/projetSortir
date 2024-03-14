@@ -60,7 +60,10 @@ class Event
     private ?Venue $venue = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $annulationDate = null;
+    private ?\DateTimeInterface $cancellationDate = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancellationReason = null;
 
     public function __construct()
     {
@@ -220,14 +223,26 @@ class Event
         return $this;
     }
 
-    public function getAnnulationDate(): ?\DateTimeInterface
+    public function getCancellationDate(): ?\DateTimeInterface
     {
-        return $this->annulationDate;
+        return $this->cancellationDate;
     }
 
-    public function setAnnulationDate(?\DateTimeInterface $annulationDate): static
+    public function setCancellationDate(?\DateTimeInterface $cancellationDate): static
     {
-        $this->annulationDate = $annulationDate;
+        $this->cancellationDate = $cancellationDate;
+
+        return $this;
+    }
+
+    public function getCancellationReason(): ?string
+    {
+        return $this->cancellationReason;
+    }
+
+    public function setCancellationReason(?string $cancellationReason): static
+    {
+        $this->cancellationReason = $cancellationReason;
 
         return $this;
     }
