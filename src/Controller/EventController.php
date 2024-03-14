@@ -102,6 +102,9 @@ class EventController extends AbstractController
         $event->addUserToAttendeesList($user);
         $entityManager->persist($event);
         $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
         //on affiche dans le détail de l'évènement qui détaille la liste des participants
         return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
     }
@@ -119,7 +122,12 @@ class EventController extends AbstractController
         $event->removeUserFromAttendeesList($user);
         $entityManager->persist($event);
         $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Vous êtes désinscrit de l\'évènement');
         //on affiche dans le détail de l'évènement qui détaille la liste des participants
         return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+
     }
+
 }
