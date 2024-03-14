@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Supprimer{% endblock %}
+
+{% block body %}
+    <h1>{{ event.name }}</h1>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Status</th>
+            <td>{{ event.status.label }}</td>
+        </tr>
+        <tr>
+            <th>Date et heure de l'évenement</th>
+            <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
+        </tr>
+            <th>Lieu</th>
+            <td>{{ event.venue.name }}</td>
+        </tr>
+        <tr>
+            <th>Campus</th>
+            <td>{{ event.campus.name }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <div>
+        {{ form(delete_event_form) }}
+    </div>
+
+    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+
+{% endblock %}
