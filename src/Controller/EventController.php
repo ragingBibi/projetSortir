@@ -7,6 +7,7 @@ use App\Entity\Status;
 use App\Form\EventFormType;
 use App\Repository\EventRepository;
 use App\Repository\StatusRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
