@@ -88,12 +88,51 @@ class EventController extends AbstractController
         //on recherche via le repository l'utilisateur qui correspond à l'email de l'utilisateur connecté
         // et on le stocke dans $user pour avoir un objet de type User
         $user = $userRepository->findOneBy(['email' => $userConnected->getEmail()]);
-        //on ajoute l'utilisateur dans la liste des participants
-        $event->addUserToAttendeesList($user);
-        $entityManager->persist($event);
-        $entityManager->flush();
+
+
+        //on pose la condition que la date de cloture des inscriptions à l'event n'est pas dépassée
+        if (!$event->getRegistrationDeadline() > new \DateTime('now')) {
+
+            //on ajoute l'utilisateur dans la liste des participants SI il reste de la place dans le nombre d'inscrits maximum
+            if (count($event->getAttendeesList()) < $event->getMaxAttendees()) {
+                $event->addUserToAttendeesList($user);
+                $entityManager->persist($event);
+                $entityManager->flush();
+                //message flash
+                $this->addFlash('success', 'Vous êtes inscrit à l\'évènement');
+            } else {
+                //message flash pour avertir de l'echec. Le user n'est pas inscrit car plus de place
+                $this->addFlash('warning', 'Le nombre maximum d\'inscrits a été atteint, vous ne pouvez plus vous inscrire.');
+            }
+            //condition si la date de côture des inscriptions à l'event est dépassée
+        } else {
+            //message flash pour avertir de l'echec. Le user n'est pas inscrit
+            $this->addFlash('warning', 'La date de cloture de l\'évènement est dépassée, vous ne pouvez plus vous inscrire.');
+        }
+
         //on affiche dans le détail de l'évènement qui détaille la liste des participants
         return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+    }
+
+    //se désinscire à un évenement par pression d'un bouton, enlève l'utilisateur de la liste des participants event.attendeesList
+    #[Route('/{id}/unsubscribe', name: 'unsubscribe', methods: ['POST', 'GET'])]
+    public function unsubcribe(Event $event, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        //on récupère l'utilisateur connecté
+        $userConnected = $this->getUser();
+        //on recherche via le repository l'utilisateur qui correspond à l'email de l'utilisateur connecté
+        // et on le stocke dans $user pour avoir un objet de type User
+        $user = $userRepository->findOneBy(['email' => $userConnected->getEmail()]);
+        //on enlémentine l'utilisateur de la liste des participants
+        $event->removeUserFromAttendeesList($user);
+        $entityManager->persist($event);
+        $entityManager->flush();
+
+        //message flash
+        $this->addFlash('success', 'Vous êtes désinscrit de l\'évènement');
+        //on affiche dans le détail de l'évènement qui détaille la liste des participants
+        return $this->redirectToRoute('event_details', ['id' => $event->getId()]);
+
     }
 
 }

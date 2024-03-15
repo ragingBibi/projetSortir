@@ -2,6 +2,11 @@
 
 {% block title %}Jet:Laged:Brains - Accueil{% endblock %}
 
+{% block pageName %}
+    <h4>Filtrer les sorties</h4>
+    {%  include 'partials/_searchbar.html.twig' with {'form': form} only %}
+{%  endblock %}
+
 {% block body %}
 
 <table class="table">
@@ -28,7 +33,7 @@
         <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
         <td>{{ event.status.label }}</td>
-        <td>{{ event.creator.pseudo }}</td>
+        <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
 
         {% if is_granted('ROLE_USER') %}
             {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
@@ -65,7 +70,7 @@
 {#                Si pas créateur et pas inscrit et event publié on peut s'inscrire#}
                 {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
                     {% if app.user in event.attendeesList %}
-                        <a href="">Se désister</a>
+                        <a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a>
                     {% else %}
                         <a href="{{ path('event_subscribe', {'id': event.id}) }}" >S'inscrire</a>
                     {% endif %}

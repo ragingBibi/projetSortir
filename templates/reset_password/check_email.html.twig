@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}L'email pour réinitialiser le mdp vient d'être envoyé {% endblock %}
+
+{% block body %}
+    <p>
+        Si le compte correspondant à votre adresse email existe, tu recevras un mail avec un lien permettant de réinitialiser le mdt de passe.
+        Ce lien expirera sous {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+    </p>
+    <p> Si ne vous recevez pas d'email, vérifiez vos courrier indésirable <a href="{{ path('app_forgot_password_request') }}">Réessayez</a>.</p>
+{% endblock %}

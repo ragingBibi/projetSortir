@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste lieux{% endblock %}
+{% block pageName %}Liste des lieux d'événements{% endblock %}
+
+{% block body %}
+
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom </th>
+                <th scope="col">Rue </th>
+                <th scope="col">Ville</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for venue in venues %}
+            <tr>
+                <td>{{ venue.id }}</td>
+                <td>{{ venue.name }}</td>
+                <td>{{ venue.street }}</td>
+                <td>{{ venue.city.name }}</td>
+                <td>{{ venue.latitude }}</td>
+                <td>{{ venue.longitude }}</td>
+                <td>
+
+                    <a href="{{ path('app_venue_edit', {'id': venue.id}) }}">Modifier</a>
+                    <a href="{{ path('app_venue_delete', {'id': venue.id}) }}">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary"  href="{{ path('app_venue_new') }}">Nouveau lieu</a>
+{% endblock %}

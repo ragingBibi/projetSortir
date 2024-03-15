@@ -3,8 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\EventSearch;
+use App\Model\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @extends ServiceEntityRepository<Event>
@@ -20,6 +24,33 @@ class EventRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Event::class);
     }
+
+    public function findBySearch(SearchData $searchData)
+    {
+        $events = $this->createQueryBuilder('e')
+            ->orderBy('e.startingDateTime', 'DESC');
+
+        if (!empty($searchData->keyword)) {
+            $events = $events
+                ->andWhere('e.name LIKE :keyword')
+                ->setParameter('keyword', "%{$searchData->keyword}%");
+        }
+
+        if(!empty($searchData->campus)) {
+            $events = $events
+                ->join('e.campus', 'campus')
+                ->andWhere('e.campus = :campus')
+                ->addSelect('campus')
+                ->setParameter('campus', $searchData->campus);
+        }
+
+        return $events
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
 
     //    /**
     //     * @return Event[] Returns an array of Event objects

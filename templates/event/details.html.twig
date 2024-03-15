@@ -49,9 +49,9 @@
     <div>
         {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
             {% if app.user in event.attendeesList %}
-                <button><a>Se désister</a></button>
+                <button><a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a></button>
             {% else %}
-                <button><a>S'inscrire</a></button>
+                <button><a href="{{ path('event_subscribe', {'id':  event.id}) }}">S'inscrire</a></button>
             {% endif %}
         {% endif %}
         {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}

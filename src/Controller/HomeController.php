@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\User;
+use App\Form\EventSearchType;
+use App\Model\SearchData;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -15,14 +20,27 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route(path: '', name: 'home', methods: ['GET'])]
-    public function home(EventRepository $eventRepository): Response
+    public function home(EventRepository $eventRepository, Request $request): Response
     {
         //on récupère l'utilisateur connecté
         $user = $this->getUser();
+        //On crée le formulaire de recherche
+        $searchData = new SearchData();
+        $form = $this->createForm(EventSearchType::class, $searchData);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchData->page = $request->get('page', 1);
+            $events = $eventRepository->findBySearch($searchData);
+
+        } else {
+            $events = $eventRepository->findAll();
+
+        }
         return $this->render('home/home.html.twig', [
-            //on récupère tous les events créés
-            'events' => $eventRepository->findAll(),
+            'events' => $events,
+            'form' => $form->createView()
         ]);
+
     }
 }
