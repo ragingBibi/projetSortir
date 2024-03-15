@@ -33,7 +33,7 @@
         <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
         <td>{{ event.status.label }}</td>
-        <td>{{ event.creator.pseudo }}</td>
+        <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
 
         {% if is_granted('ROLE_USER') %}
             {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
