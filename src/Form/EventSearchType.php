@@ -5,8 +5,11 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Entity\EventSearch;
 use App\Entity\Event;
+use App\Model\SearchData;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,28 +25,36 @@ class EventSearchType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'attr' => [
-                    'placeholder' => 'Saisir un mot clé',
+                    'placeholder' => 'Recherche par mot clé',
+                    'class' => 'form-control'
                 ]
             ])
-            ->add('maxAttendees', IntegerType::class, [
+            ->add('campus', ChoiceType::class, [
                 'required' => false,
                 'label' => false,
+                'multiple' => false,
+                'expanded' => false,
+                'placeholder' => 'Choix du campus',
+                'choices' => [
+                    'NANTES' => 'NANTES',
+                    'NIORT' => 'NIORT',
+                    'RENNES' => 'RENNES',
+                    'QUIMPER' => 'QUIMPER',
+                ],
                 'attr' => [
-                    'placeholder' => 'Nombre max d\'inscrits',
+                    'class' => 'form-control'
                 ]
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Rechercher',
             ]);
 
     }
 
+
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => EventSearch::class,
-            'csrf_protection' => false,
+            'data_class' => SearchData::class,
             'method' => 'GET',
+            'csrf_protection' => false,
         ]);
     }
 

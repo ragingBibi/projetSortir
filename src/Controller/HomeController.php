@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\EventSearch;
+use App\Entity\Event;
 use App\Entity\User;
 use App\Form\EventSearchType;
+use App\Model\SearchData;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +25,22 @@ class HomeController extends AbstractController
         //on récupère l'utilisateur connecté
         $user = $this->getUser();
         //On crée le formulaire de recherche
-        $search = new EventSearch();
-        $form = $this->createForm(EventSearchType::class, $search);
+        $searchData = new SearchData();
+        $form = $this->createForm(EventSearchType::class, $searchData);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $searchData->page = $request->get('page', 1);
+            $events = $eventRepository->findBySearch($searchData);
+
+        } else {
+            $events = $eventRepository->findAll();
+
+        }
         return $this->render('home/home.html.twig', [
-            //on récupère tous les events créés
-            'events' => $eventRepository->findAll(),
-            //On passe le formulaire de recherche à la vue
+            'events' => $events,
             'form' => $form->createView()
         ]);
+
     }
 }

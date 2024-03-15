@@ -4,7 +4,7 @@
 
 {% block pageName %}
     <h4>Filtrer les sorties</h4>
-    {{ include('partials/_searchbar.html.twig') }}
+    {%  include 'partials/_searchbar.html.twig' with {'form': form} only %}
 {%  endblock %}
 
 {% block body %}
