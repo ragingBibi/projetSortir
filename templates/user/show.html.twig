@@ -8,7 +8,7 @@
     <h1>{{ user.pseudo }}</h1>
 
     {% if user.picture is not empty %}
-        <img src="{{ asset('uploads/' ~ user.picture) }} alt='votre image de profil' width='50px' "/>
+        <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
     {% endif %}
 
     <table class="table">
