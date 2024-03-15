@@ -25,9 +25,9 @@
     </table>
 
 
-    <div>
+    <form method="post" onsubmit="return confirm('Etes-vous certain de vouloir supprimer cet evenement ?');">
         {{ form(delete_event_form) }}
-    </div>
+    </form>
 
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 
