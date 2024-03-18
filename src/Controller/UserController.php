@@ -58,6 +58,10 @@ class UserController extends AbstractController
     #[Route('/profile/{id}', name: 'app_edit_profile', methods: ['GET', 'POST'])]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+        if (!$user->isIsActive()) {
+            $this->addFlash('danger text-center', 'Votre compte a été désactivé par les administrateurs.');
+        }
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
