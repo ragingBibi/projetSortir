@@ -91,7 +91,7 @@ class EventController extends AbstractController
 
 
         //on pose la condition que la date de cloture des inscriptions à l'event n'est pas dépassée
-        if (!$event->getRegistrationDeadline() > new \DateTime('now')) {
+       /* if (!$event->getRegistrationDeadline() > new \DateTime('now')) {*/
 
             //on ajoute l'utilisateur dans la liste des participants SI il reste de la place dans le nombre d'inscrits maximum
             if (count($event->getAttendeesList()) < $event->getMaxAttendees()) {
@@ -105,10 +105,10 @@ class EventController extends AbstractController
                 $this->addFlash('warning', 'Le nombre maximum d\'inscrits a été atteint, vous ne pouvez plus vous inscrire.');
             }
             //condition si la date de côture des inscriptions à l'event est dépassée
-        } else {
+      /*  } else {
             //message flash pour avertir de l'echec. Le user n'est pas inscrit
             $this->addFlash('warning', 'La date de cloture de l\'évènement est dépassée, vous ne pouvez plus vous inscrire.');
-        }
+        }*/
 
         //on affiche dans le détail de l'évènement qui détaille la liste des participants
         return $this->redirectToRoute('event_details', ['id' => $event->getId()]);

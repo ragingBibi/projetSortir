@@ -14,6 +14,19 @@
         <div class="form-group mb-4">
             {{ form_widget(form.endDateTime) }}
         </div>
+        <div>
+            {{ form_widget(form.isOrganizer) }}
+        </div>
+        <div>
+            {{ form_widget(form.isParticipant) }}
+        </div>
+        <div>
+            {{ form_widget(form.isNotParticipant) }}
+        </div>
+        <div>
+            {{ form_widget(form.passedDateTime) }}
+        </div>
+
         <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
         {{ form_end(form) }}
     </div>
