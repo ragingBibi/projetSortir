@@ -28,6 +28,8 @@ class EventRepository extends ServiceEntityRepository
     public function findBySearch(SearchData $searchData)
     {
         $events = $this->createQueryBuilder('e')
+            ->join('e.campus', 'campus')
+            ->join('e.creator' , 'creator')
             ->orderBy('e.startingDateTime', 'DESC');
 
         if (!empty($searchData->keyword)) {
@@ -38,10 +40,26 @@ class EventRepository extends ServiceEntityRepository
 
         if(!empty($searchData->campus)) {
             $events = $events
-                ->join('e.campus', 'campus')
-                ->andWhere('e.campus = :campus')
-                ->addSelect('campus')
+                ->andWhere('campus.id = :campus')
                 ->setParameter('campus', $searchData->campus);
+        }
+
+        if(!empty($searchData->beginDateTime)) {
+            $events = $events
+                ->andWhere('e.startingDateTime >= :beginDateTime')
+                ->setParameter('beginDateTime', $searchData->beginDateTime);
+        }
+
+        if(!empty($searchData->endDateTime)) {
+            $events = $events
+                ->andWhere('e.startingDateTime <= :endDateTime')
+                ->setParameter('endDateTime', $searchData->endDateTime);
+        }
+
+        if(!empty($searchData->isOrganizer)) {
+            $events = $events
+                ->andWhere('creator = :isOrganizer')
+                ->setParameter('isOrganizer', $searchData->isOrganizer);
         }
 
         return $events
