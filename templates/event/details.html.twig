@@ -47,6 +47,7 @@
     </table>
 
     <div>
+{#        On peut s'inscrire si l'envent est publié et que l'utilisateur connectén'est pas l'organisateur#}
         {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
             {% if app.user in event.attendeesList %}
                 <button><a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a></button>
@@ -54,8 +55,13 @@
                 <button><a href="{{ path('event_subscribe', {'id':  event.id}) }}">S'inscrire</a></button>
             {% endif %}
         {% endif %}
+
+{#        On peut modifier et supprimer un evenement si l'utilisateur connecté est l'organisateur ou l'admin #}
         {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
-            <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+{#            On peut publié uniquement si l'event est Créé #}
+            {% if event.status.label == 'Créé' %}
+                <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+            {% endif %}
             <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
             <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
         {% endif %}
