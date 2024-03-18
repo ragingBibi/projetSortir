@@ -8,16 +8,24 @@
 
 {% block body %}
 
-    <div class="flex justify-content">
-        {{ form(update_event_form) }}
-    </div>
+    <h1>{{ event.name }}</h1>
 
-    <div>
-        <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
-        {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}
-            <button type="submit"><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
-        {% endif %}
-    </div>
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
+
+    {% if app.user.isActive == true %}
+        <div class="flex justify-content">
+            {{ form(update_event_form) }}
+        </div>
+
+        <div>
+            <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
+            {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}
+                <button type="submit"><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+            {% endif %}
+        </div>
+    {% endif %}
 
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 

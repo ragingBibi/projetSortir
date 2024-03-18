@@ -3,80 +3,90 @@
 {% block title %}Détails{% endblock %}
 
 {% block body %}
+
     <h1>{{ event.name }}</h1>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Status</th>
-                <td>{{ event.status.label }}</td>
-            </tr>
-            {% if event.status.label == 'Annulé' and event.cancellationReason != null %}
+
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
+
+    {% if app.user.isActive == true %}
+        <table class="table">
+            <tbody>
                 <tr>
-                    <th>Motif d'annulation</th>
-                    <td>{{ event.cancellationReason }}</td>
+                    <th>Status</th>
+                    <td>{{ event.status.label }}</td>
                 </tr>
-            {% endif %}
-            <tr>
-                <th>Date et heure de l'évenement</th>
-                <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Durée</th>
-                <td>{{ event.duration ? event.duration.format('%d jour(s), %H heure(s), %I minute(s)') : '' }}</td>
-            <tr>
-                <th>Lieu</th>
-                <td>{{ event.venue.name }}</td>
-            </tr>
-            <tr>
-                <th>Date limite d'inscription</th>
-                <td>{{ event.registrationDeadline ? event.registrationDeadline|format_datetime('medium', 'short', locale='fr') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ event.details }}</td>
-            </tr>
-            <tr>
-                <th>Campus</th>
-                <td>{{ event.campus.name }}</td>
-            </tr>
-            <tr>
-                <th>Organisateur</th>
-                <td>{{ event.creator.pseudo }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div>
-{#        On peut s'inscrire si l'envent est publié et que l'utilisateur connectén'est pas l'organisateur#}
-        {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
-            {% if app.user in event.attendeesList %}
-                <button><a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a></button>
-            {% else %}
-                <button><a href="{{ path('event_subscribe', {'id':  event.id}) }}">S'inscrire</a></button>
-            {% endif %}
-        {% endif %}
-
-{#        On peut modifier et supprimer un evenement si l'utilisateur connecté est l'organisateur ou l'admin #}
-        {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
-{#            On peut publié uniquement si l'event est Créé #}
-            {% if event.status.label == 'Créé' %}
-                <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
-            {% endif %}
-            <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
-            <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
-        {% endif %}
-    </div>
-
-    <table>
-        <thead>Participants</thead>
-        <tbody>
-            {% for attendee in attendees %}
+                {% if event.status.label == 'Annulé' and event.cancellationReason != null %}
+                    <tr>
+                        <th>Motif d'annulation</th>
+                        <td>{{ event.cancellationReason }}</td>
+                    </tr>
+                {% endif %}
                 <tr>
-                    <td>{{ attendee.pseudo }}</td>
+                    <th>Date et heure de l'évenement</th>
+                    <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                <tr>
+                    <th>Durée</th>
+                    <td>{{ event.duration ? event.duration.format('%d jour(s), %H heure(s), %I minute(s)') : '' }}</td>
+                <tr>
+                    <th>Lieu</th>
+                    <td><p>{{ event.venue.name }}</p>
+                        <p>{{ event.venue.street }}, {{ event.venue.city.name }} {{ event.venue.city.zipCode }}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Date limite d'inscription</th>
+                    <td>{{ event.registrationDeadline ? event.registrationDeadline|format_datetime('medium', 'short', locale='fr') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ event.details }}</td>
+                </tr>
+                <tr>
+                    <th>Campus</th>
+                    <td>{{ event.campus.name }}</td>
+                </tr>
+                <tr>
+                    <th>Organisateur</th>
+                    <td>{{ event.creator.pseudo }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+    {#        On peut s'inscrire si l'envent est publié et que l'utilisateur connectén'est pas l'organisateur#}
+            {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
+                {% if app.user in event.attendeesList %}
+                    <button><a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a></button>
+                {% else %}
+                    <button><a href="{{ path('event_subscribe', {'id':  event.id}) }}">S'inscrire</a></button>
+                {% endif %}
+            {% endif %}
+
+    {#        On peut modifier et supprimer un evenement si l'utilisateur connecté est l'organisateur ou l'admin #}
+            {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
+    {#            On peut publié uniquement si l'event est Créé #}
+                {% if event.status.label == 'Créé' %}
+                    <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+                {% endif %}
+                <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
+                <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
+            {% endif %}
+        </div>
+
+        <table>
+            <thead>Participants</thead>
+            <tbody>
+                {% for attendee in attendees %}
+                    <tr>
+                        <td>{{ attendee.pseudo }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 

@@ -58,6 +58,10 @@ class UserController extends AbstractController
     #[Route('/profile/{id}', name: 'app_edit_profile', methods: ['GET', 'POST'])]
     public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+        if (!$user->isIsActive()) {
+            $this->addFlash('danger text-center', 'Ce compte a été désactivé par les administrateurs.');
+        }
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -73,7 +77,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success text-center', 'Votre profil a bien été mis à jour');
+            $this->addFlash('success text-center', 'Le profil a bien été mis à jour');
             return $this->redirectToRoute('app_edit_profile', ['id' => $user->getId()]);
         }
 
@@ -84,13 +88,70 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
+//        $user->setIsActive(false);
+//
+//        $currentDateTime = new \DateTime();
+//
+////        // Récupérer tous les événements passeés
+////        $passedEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+////            return $event->getStartingDateTime() < $currentDateTime;
+////        });
+//
+//        // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
+//        $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+//            return $event->getStartingDateTime() > $currentDateTime;
+//        });
+//
+//        // Désinscrire l'utilisateur de ces événements
+//        foreach ($futureEvents as $event) {
+//            $user->removeAttendingEventsList($event);
+//            $event->removeUserFromAttendeesList($user);
+//        }
+//
+//        $entityManager->persist($user);
+//        $entityManager->flush();
+//
+//        $this->addFlash('success text-center', 'L\'utilisateur a été supprimé');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/{id}/disable', name: 'user_disable', methods: ['Get', 'POST'])]
+    public function disable(User $user, EntityManagerInterface $entityManager): Response {
+
+        $user->setIsActive(false);
+
+        $currentDateTime = new \DateTime();
+
+        // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
+        $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+            return $event->getStartingDateTime() > $currentDateTime;
+        });
+
+        // Désinscrire l'utilisateur de ces événements
+        foreach ($futureEvents as $event) {
+            $user->removeAttendingEventsList($event);
+            $event->removeUserFromAttendeesList($user);
+        }
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'L\'utilisateur a été désactivé');
+        return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+    }
+
+    // Fonction pour désactiver un utilisateur
+    #[Route('/{id}/activate', name: 'user_activate', methods: ['Get', 'POST'])]
+    public function activate(User $user, EntityManagerInterface $entityManager): Response {
+
+        $user->setIsActive(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'L\'utilisateur a été réactivé');
+        return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+    }
+
 }

@@ -3,31 +3,39 @@
 {% block title %}Supprimer{% endblock %}
 
 {% block body %}
+
     <h1>{{ event.name }}</h1>
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Status</th>
-            <td>{{ event.status.label }}</td>
-        </tr>
-        <tr>
-            <th>Date et heure de l'évenement</th>
-            <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
-        <tr>
-            <th>Lieu</th>
-            <td>{{ event.venue.name }}</td>
-        </tr>
-        <tr>
-            <th>Campus</th>
-            <td>{{ event.campus.name }}</td>
-        </tr>
-        </tbody>
-    </table>
+
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
+
+    {% if app.user.isActive == true %}
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Status</th>
+                <td>{{ event.status.label }}</td>
+            </tr>
+            <tr>
+                <th>Date et heure de l'évenement</th>
+                <td>{{ event.startingDateTime ? event.startingDateTime|format_datetime('medium', 'short', locale='fr') : '' }}</td>
+            <tr>
+                <th>Lieu</th>
+                <td>{{ event.venue.name }}</td>
+            </tr>
+            <tr>
+                <th>Campus</th>
+                <td>{{ event.campus.name }}</td>
+            </tr>
+            </tbody>
+        </table>
 
 
-    <form method="post" onsubmit="return confirm('Etes-vous certain de vouloir supprimer cet evenement ?');">
-        {{ form(delete_event_form) }}
-    </form>
+        <form method="post" onsubmit="return confirm('Etes-vous certain de vouloir supprimer cet evenement ?');">
+            {{ form(delete_event_form) }}
+        </form>
+    {% endif %}
 
     <a href=" {{ path('event_details', {'id': event.id}) }}">Retour au détail</a>
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>

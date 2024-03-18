@@ -5,8 +5,15 @@
 
 {% block body %}
 
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
 
-    {{ include('venue/_form.html.twig') }}
+    {% if app.user.isActive == true %}
+        {{ include('venue/_form.html.twig') }}
+    {% endif %}
 
     <a href="{{ path('app_venue_index') }}">Retour à la liste</a>
+    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+
 {% endblock %}

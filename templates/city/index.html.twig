@@ -5,36 +5,43 @@
 
 {% block body %}
 
+    {% if app.user.isActive == false %}
+        <h2 >Compte bloqué</h2>
+        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
+    {% endif %}
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Nom </th>
-                <th scope="col">Code postal</th>
-                <th scope="col">Actions</th>
+    {% if app.user.isActive == true %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nom </th>
+                    <th scope="col">Code postal</th>
+                    <th scope="col">Actions</th>
 
-            </tr>
-        </thead>
-        <tbody>
-        {% for city in cities %}
-            <tr>
-                <td >{{ city.id }}</td>
-                <td>{{ city.name }}</td>
-                <td>{{ city.zipCode }}</td>
-                <td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for city in cities %}
+                <tr>
+                    <td >{{ city.id }}</td>
+                    <td>{{ city.name }}</td>
+                    <td>{{ city.zipCode }}</td>
+                    <td>
 
-                    <a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
-                    <a href="{{ path('app_city_delete', {'id': city.id}) }}">Supprimer</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                        <a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
+                        <a href="{{ path('app_city_delete', {'id': city.id}) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a class="btn btn-primary" href="{{ path('app_city_new') }}">Nouvelle ville</a>
+        <a class="btn btn-primary" href="{{ path('app_city_new') }}">Nouvelle ville</a>
+    {% endif %}
+
 {% endblock %}

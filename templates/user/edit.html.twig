@@ -5,6 +5,7 @@
 {% block pageName %}Mon profil{% endblock %}
 
 {% block body %}
+
     {{ form_start(form) }}
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
@@ -41,6 +42,15 @@
                     </div>
 
                     {{ form_row(form.submit) }}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% if user.isActive == true %}
+                        <button type="button" class="btn btn-danger"><a href="{{ url('user_disable', {'id': user.id}) }}">Désactiver</a></button>
+                        {% else %}
+                        <button type="button" class="btn btn-success"><a href="{{ url('user_activate', {'id': user.id}) }}">Réactiver</a></button>
+                        {% endif %}
+                    {% endif %}
+
                 </div>
             </div>
         </div>

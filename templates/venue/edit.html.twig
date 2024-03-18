@@ -5,12 +5,18 @@
 
 {% block body %}
 
-<div class="">
-    {{ include('venue/_form.html.twig', {'button_label': 'Modifier'}) }}
-    <br>
-    {{ include('venue/_delete_form.html.twig') }}
-    <br>
-    <a href="{{ path('app_venue_index') }}">Retour à la liste</a>
-</div>
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
+
+    {% if app.user.isActive == true %}
+        <div class="">
+            {{ include('venue/_form.html.twig', {'button_label': 'Modifier'}) }}
+            <br>
+            {{ include('venue/_delete_form.html.twig') }}
+            <br>
+            <a href="{{ path('app_venue_index') }}">Retour à la liste</a>
+        </div>
+    {% endif %}
 
 {% endblock %}
