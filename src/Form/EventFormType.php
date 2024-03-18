@@ -41,12 +41,13 @@ class EventFormType extends AbstractType
             ])
             ->add('duration', DateIntervalType::class, [
                 'label' => 'Duree',
-                'required' => true,
+
                 'labels' => [
                     'days' => 'Jours',
                     'hours' => 'Heures',
                     'minutes' => 'Minutes'
                 ],
+
                 'widget' => 'choice',
                 'with_years' => false,
                 'with_months' => false,
@@ -55,8 +56,9 @@ class EventFormType extends AbstractType
                 'hours' => range(1, 24),
                 'with_minutes' => true,
                 'minutes' => range(1, 60),
-                'row_attr' => [
-                    'class' => 'input-group mb-3 duration-fields'
+
+                'attr' => [
+                    'class' => 'form-control'
                 ]
             ])
             ->add('maxAttendees', IntegerType::class, [
