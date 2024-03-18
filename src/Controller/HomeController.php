@@ -8,7 +8,7 @@ use App\Form\EventSearchType;
 use App\Model\SearchData;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
-use Knp\Component\Pager\PaginatorInterface;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +30,8 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $searchData->page = $request->get('page', 1);
             $events = $eventRepository->findBySearch($searchData);
+            dd($events);
 
         } else {
             $events = $eventRepository->findAll();
