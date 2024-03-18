@@ -32,7 +32,9 @@
                     <td>{{ event.duration ? event.duration.format('%d jour(s), %H heure(s), %I minute(s)') : '' }}</td>
                 <tr>
                     <th>Lieu</th>
-                    <td>{{ event.venue.name }}</td>
+                    <td><p>{{ event.venue.name }}</p>
+                        <p>{{ event.venue.street }}, {{ event.venue.city.name }} {{ event.venue.city.zipCode }}</p>
+                    </td>
                 </tr>
                 <tr>
                     <th>Date limite d'inscription</th>
