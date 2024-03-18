@@ -29,6 +29,7 @@
         {{ form(delete_event_form) }}
     </form>
 
+    <a href=" {{ path('event_details', {'id': event.id}) }}">Retour au détail</a>
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 
 {% endblock %}

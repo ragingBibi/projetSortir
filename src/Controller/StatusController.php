@@ -56,9 +56,5 @@ class StatusController extends AbstractController
         ]);
     }
 
-//    public function archive(Request $request, Event $event, EntityManagerInterface $entityManager): Response
-//    {
-//
-//    }
 
 }
