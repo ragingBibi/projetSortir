@@ -59,7 +59,7 @@ class UserController extends AbstractController
     public function updateUser(User $user, Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
         if (!$user->isIsActive()) {
-            $this->addFlash('danger text-center', 'Votre compte a été désactivé par les administrateurs.');
+            $this->addFlash('danger text-center', 'Ce compte a été désactivé par les administrateurs.');
         }
 
         $form = $this->createForm(UserType::class, $user);
@@ -77,7 +77,7 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $this->addFlash('success text-center', 'Votre profil a bien été mis à jour');
+            $this->addFlash('success text-center', 'Le profil a bien été mis à jour');
             return $this->redirectToRoute('app_edit_profile', ['id' => $user->getId()]);
         }
 
@@ -88,21 +88,53 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(User $user, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-        }
-
+//        $user->setIsActive(false);
+//
+//        $currentDateTime = new \DateTime();
+//
+////        // Récupérer tous les événements passeés
+////        $passedEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+////            return $event->getStartingDateTime() < $currentDateTime;
+////        });
+//
+//        // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
+//        $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+//            return $event->getStartingDateTime() > $currentDateTime;
+//        });
+//
+//        // Désinscrire l'utilisateur de ces événements
+//        foreach ($futureEvents as $event) {
+//            $user->removeAttendingEventsList($event);
+//            $event->removeUserFromAttendeesList($user);
+//        }
+//
+//        $entityManager->persist($user);
+//        $entityManager->flush();
+//
+//        $this->addFlash('success text-center', 'L\'utilisateur a été supprimé');
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    // Fonction pour désactiver un utilisateur
     #[Route('/{id}/disable', name: 'user_disable', methods: ['Get', 'POST'])]
     public function disable(User $user, EntityManagerInterface $entityManager): Response {
 
         $user->setIsActive(false);
+
+        $currentDateTime = new \DateTime();
+
+        // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
+        $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+            return $event->getStartingDateTime() > $currentDateTime;
+        });
+
+        // Désinscrire l'utilisateur de ces événements
+        foreach ($futureEvents as $event) {
+            $user->removeAttendingEventsList($event);
+            $event->removeUserFromAttendeesList($user);
+        }
+
         $entityManager->persist($user);
         $entityManager->flush();
 

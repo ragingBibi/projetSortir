@@ -61,7 +61,7 @@
                     {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
 
     {#                    Si event pas publié ni annulé on peut publier #}
-                        {% if (event.status.label == 'Créé') %}
+                        {% if (event.status.label == 'Créé')%}
                             <a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a>
                         {% endif %}
 
