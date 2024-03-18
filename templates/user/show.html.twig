@@ -11,6 +11,10 @@
         <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
     {% endif %}
 
+    {% if is_granted('ROLE_ADMIN') and user.isActive == false %}
+        <h2>Le compte de cet utilisateur est désactivé</h2>
+    {% endif %}
+
     <table class="table">
         <tbody>
         {#            <tr> #}
@@ -64,9 +68,8 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    <a href="{{ path('app_user_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">edit</a>
+    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
 
-    {{ include('user/delete.html.twig') }}
 {% endblock %}

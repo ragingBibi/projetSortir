@@ -93,4 +93,17 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    // Fonction pour désactiver un utilisateur
+    #[Route('/{id}/disable', name: 'user_disable', methods: ['Get', 'POST'])]
+    public function disable(User $user, EntityManagerInterface $entityManager): Response {
+
+        $user->setIsActive(false);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'L\'utilisateur a été désactivé');
+        return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+    }
+
 }

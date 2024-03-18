@@ -47,6 +47,11 @@
                     </div>
 
                     {{ form_row(form.submit) }}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <button type="button" class="btn btn-danger"><a href="{{ url('user_disable', {'id': user.id}) }}">Désactiver</a></button>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
