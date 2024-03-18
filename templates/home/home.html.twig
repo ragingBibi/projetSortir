@@ -55,27 +55,30 @@
             <td>
                 <a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a>
 
-{#                Modification, publication et annulation autorisée pour créateur #}
-                {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
+                {# Si l'utilisateur est un désactivé, il n'a accès qu'au détail #}
+                {% if app.user.isActive == true %}
+    {#                Modification, publication et annulation autorisée pour créateur #}
+                    {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
 
-{#                    Si event pas publié ni annulé on peut publier #}
-                    {% if (event.status.label == 'Créé') %}
-                        <a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a>
+    {#                    Si event pas publié ni annulé on peut publier #}
+                        {% if (event.status.label == 'Créé') %}
+                            <a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a>
+                        {% endif %}
+
+    {#                    On peut modifier et annuler jusqu'au jour J #}
+                        {% if event.status.label == 'Créé' or event.status.label == 'Ouvert' or event.status.label == 'Clôturé' %}
+                            <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
+                            <a href="{{ path('status_delete', {'id': event.id}) }}">Annuler</a>
+                        {% endif %}
                     {% endif %}
 
-{#                    On peut modifier et annuler jusqu'au jour J #}
-                    {% if event.status.label == 'Créé' or event.status.label == 'Ouvert' or event.status.label == 'Clôturé' %}
-                        <a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a>
-                        <a href="{{ path('status_delete', {'id': event.id}) }}">Annuler</a>
-                    {% endif %}
-                {% endif %}
-
-{#                Si pas créateur ni inscrit et event publié on peut s'inscrire #}
-                {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
-                    {% if app.user in event.attendeesList %}
-                        <a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a>
-                    {% else %}
-                        <a href="{{ path('event_subscribe', {'id': event.id}) }}" >S'inscrire</a>
+    {#                Si pas créateur ni inscrit et event publié on peut s'inscrire #}
+                    {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
+                        {% if app.user in event.attendeesList %}
+                            <a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a>
+                        {% else %}
+                            <a href="{{ path('event_subscribe', {'id': event.id}) }}" >S'inscrire</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </td>

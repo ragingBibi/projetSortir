@@ -5,8 +5,16 @@
 
 {% block body %}
 
+    {% if app.user.isActive == false %}
+        <h2 >Compte bloqué</h2>
+        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
+    {% endif %}
 
-    {{ include('venue/_form.html.twig') }}
+    {% if app.user.isActive == true %}
+        {{ include('venue/_form.html.twig') }}
+    {% endif %}
 
     <a href="{{ path('app_venue_index') }}">Retour à la liste</a>
+    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+
 {% endblock %}

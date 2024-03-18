@@ -5,6 +5,12 @@
 {% block pageName %}Mon profil{% endblock %}
 
 {% block body %}
+
+    {% if app.user.isActive == false %}
+        <h2 >Compte bloqué</h2>
+        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
+    {% endif %}
+
     {{ form_start(form) }}
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
