@@ -106,4 +106,16 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
     }
 
+    // Fonction pour désactiver un utilisateur
+    #[Route('/{id}/activate', name: 'user_activate', methods: ['Get', 'POST'])]
+    public function activate(User $user, EntityManagerInterface $entityManager): Response {
+
+        $user->setIsActive(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'L\'utilisateur a été réactivé');
+        return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+    }
+
 }
