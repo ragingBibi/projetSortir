@@ -68,6 +68,8 @@
         </tbody>
     </table>
 
+    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
+
     {% if is_granted('ROLE_ADMIN') or app.user == user %}
         <h2>Sorties créées</h2>
         <table class="table">
@@ -100,6 +102,5 @@
 
     <a href="{{ path('app_user_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
 
 {% endblock %}
