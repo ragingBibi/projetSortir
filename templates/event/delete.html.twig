@@ -2,9 +2,12 @@
 
 {% block title %}Supprimer{% endblock %}
 
-{% block body %}
+{% block pageName %}
+    Supprimer l'évènement <br>
+    {{ event.name }}
+{% endblock %}
 
-    <h1>{{ event.name }}</h1>
+{% block body %}
 
     {% if app.user.isActive == false %}
         {{ include('security/blocked.html.twig') }}
@@ -32,7 +35,7 @@
         </table>
 
 
-        <form method="post" onsubmit="return confirm('Etes-vous certain de vouloir supprimer cet evenement ?');">
+        <form method="post" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer cet evenement ?');">
             {{ form(delete_event_form) }}
         </form>
     {% endif %}

@@ -62,7 +62,7 @@ class UserController extends AbstractController
             $em->flush();
 
             $this->addFlash('success text-center', 'Le profil a bien été mis à jour');
-            return $this->redirectToRoute('app_edit_profile', ['id' => $user->getId()]);
+            return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()]);
         }
 
         $organizedEvents = $user->getOrganizedEvents();

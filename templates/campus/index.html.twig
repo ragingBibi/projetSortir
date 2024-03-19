@@ -26,11 +26,13 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">Aucun site trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a class="btn btn-primary"  href="{{ path('app_campus_new') }}"> Nouveau site</a>
+    <a class="btn btn-primary"  href="{{ path('app_campus_new') }}"> Nouveau site</a><br>
+
+    <a href="{{ path('home_home') }}"> Retour à la l'accueil</a></a>
 {% endblock %}
