@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                     <th>Organisateur</th>
-                    <td>{{ event.creator.pseudo }}</td>
+                    <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
                 </tr>
             </tbody>
         </table>
@@ -81,7 +81,7 @@
             <tbody>
                 {% for attendee in attendees %}
                     <tr>
-                        <td>{{ attendee.pseudo }}</td>
+                        <td><a href="{{ path('app_user_show', {'id': attendee.id}) }}">{{ attendee.pseudo }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

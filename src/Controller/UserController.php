@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Status;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\UserType;
@@ -50,8 +51,11 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        $organizedEvents = $user->getOrganizedEvents();
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
+            'organizedEvents' => $organizedEvents
         ]);
     }
 
@@ -81,40 +85,48 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_edit_profile', ['id' => $user->getId()]);
         }
 
+        $organizedEvents = $user->getOrganizedEvents();
+
         return $this->render('user/edit.html.twig', [
             'form' => $form,
-            'user' => $user
+            'user' => $user,
+            'organizedEvents' => $organizedEvents
         ]);
     }
 
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'user_delete', methods: ['POST'])]
+    public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
     {
 //        $user->setIsActive(false);
 //
 //        $currentDateTime = new \DateTime();
 //
-////        // Récupérer tous les événements passeés
-////        $passedEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
-////            return $event->getStartingDateTime() < $currentDateTime;
-////        });
-//
-//        // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
-//        $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+//        // Désinscrire de tous les évènements futurs
+//        $futureAttendingEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
 //            return $event->getStartingDateTime() > $currentDateTime;
 //        });
-//
-//        // Désinscrire l'utilisateur de ces événements
-//        foreach ($futureEvents as $event) {
+//        foreach ($futureAttendingEvents as $event) {
 //            $user->removeAttendingEventsList($event);
 //            $event->removeUserFromAttendeesList($user);
 //        }
 //
-//        $entityManager->persist($user);
+//        // Supprimer les évennements futurs que l'utilisateur a créé
+//        $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function($event) use ($currentDateTime) {
+//            return $event->getStartingDateTime() > $currentDateTime;
+//        });
+//        foreach ($futureOrganizedEvents as $event) {
+//            $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
+//            $event->setCancellationDate(new \DateTimeImmutable());
+//            $event->setCancellationReason('Le compte de cet utilisateur a été supprimé');
+//
+//            $entityManager->persist($event);
+//        }
+//
+//        $entityManager->remove($user);
 //        $entityManager->flush();
 //
 //        $this->addFlash('success text-center', 'L\'utilisateur a été supprimé');
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}/disable', name: 'user_disable', methods: ['Get', 'POST'])]
