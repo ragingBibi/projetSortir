@@ -1,11 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}{{ user.pseudo }}{% endblock %}
+
+{% block pageName %}{{ user.pseudo }}{% endblock %}
 
 {% block body %}
-
-
-    <h1>{{ user.pseudo }}</h1>
 
     {% if user.picture is not empty %}
         <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
@@ -17,23 +16,6 @@
 
     <table class="table">
         <tbody>
-        {#            <tr> #}
-        {#                <th>Id</th> #}
-        {#                <td>{{ user.id }}</td> #}
-        {#            </tr> #}
-        {#            #}
-        {#            <tr> #}
-        {#                <th>Roles</th> #}
-        {#                <td>{{ user.roles ? user.roles|json_encode : '' }}</td> #}
-        {#            </tr> #}
-        {#            <tr> #}
-        {#                <th>Password</th> #}
-        {#                <td>{{ user.password }}</td> #}
-        {#            </tr> #}
-        {#            <tr> #}
-        {#                <th>Pseudo</th> #}
-        {#                <td>{{ user.pseudo }}</td> #}
-        {#            </tr> #}
         <tr>
             <th>Prénom</th>
             <td>{{ user.firstName }}</td>
@@ -53,22 +35,11 @@
         <tr>
             <th>Campus</th>
             <td>{{ user.campus.name}}</td>
-        {#            <tr> #}
-        {#                <th>IsAdmin</th> #}
-        {#                <td>{{ user.isAdmin ? 'Yes' : 'No' }}</td> #}
-        {#            </tr> #}
-        {#            <tr> #}
-        {#                <th>IsActive</th> #}
-        {#                <td>{{ user.isActive ? 'Yes' : 'No' }}</td> #}
-        {#            </tr> #}
-        {#            <tr> #}
-        {#                <th>IsVerified</th> #}
-        {#                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td> #}
-        {#            </tr> #}
+        </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifer</a>
 
     {% if is_granted('ROLE_ADMIN') or app.user == user %}
         <h2>Sorties créées</h2>
