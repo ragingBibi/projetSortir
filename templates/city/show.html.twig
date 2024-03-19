@@ -6,7 +6,7 @@
 {% block body %}
 
     {% if app.user.isActive == false %}
-        <h2 >Compte bloqué</h2>
+        <h2>Compte bloqué</h2>
         <p>L'accès de votre compte a été restreint par les administrateurs.</p>
     {% endif %}
 
@@ -28,7 +28,9 @@
             </tbody>
         </table>
 
-        <a href="{{ path('app_city_edit', {'id': city.id}) }}"> Modifier </a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_city_edit', {'id': city.id}) }}"> Modifier </a>
+        {% endif %}
         <br>
         <a href="{{ path('app_city_index') }}">Retour à la liste</a>
 

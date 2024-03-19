@@ -19,7 +19,9 @@
                     <th scope="col">Ville</th>
                     <th scope="col">Latitude</th>
                     <th scope="col">Longitude</th>
-                    <th scope="col">Actions</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -31,11 +33,12 @@
                     <td>{{ venue.city.name }}</td>
                     <td>{{ venue.latitude }}</td>
                     <td>{{ venue.longitude }}</td>
-                    <td>
-
-                        <a href="{{ path('app_venue_edit', {'id': venue.id}) }}">Modifier</a>
-                        <a href="{{ path('app_venue_delete', {'id': venue.id}) }}">Supprimer</a>
-                    </td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('app_venue_edit', {'id': venue.id}) }}">Modifier</a>
+                            <a href="{{ path('app_venue_delete', {'id': venue.id}) }}">Supprimer</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% else %}
                 <tr>

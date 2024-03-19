@@ -68,8 +68,39 @@
         </tbody>
     </table>
 
+    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
+
+    {% if is_granted('ROLE_ADMIN') or app.user == user %}
+        <h2>Sorties créées</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie</th>
+                <th scope="col">Clôture</th>
+                <th scope="row">Inscrits / Places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Détail</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {# Itération sur la liste des events #}
+            {%  for event in organizedEvents %}
+                <tr>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
+                    <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
+                    <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
+                    <td>{{ event.status.label }}</td>
+                    <td><a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
     <a href="{{ path('app_user_index') }}">Retour à la liste</a>
 
-    <a href="{{ path('app_edit_profile', {'id': user.id}) }}">Modifer</a>
 
 {% endblock %}
