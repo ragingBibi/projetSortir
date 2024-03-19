@@ -4,10 +4,13 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Form\CSVFileImportType;
 use App\Form\RegistrationFormType;
+use App\Repository\CampusRepository;
 use App\Security\AppAuthenticator;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -16,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -37,7 +41,7 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $user->setPseudo($user->getFirstName().'.'.$user->getLastName());
+            $user->setPseudo($user->getFirstName() . '.' . $user->getLastName());
 
             // encode the plain password
             $user->setPassword(
@@ -77,6 +81,60 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+        ]);
+    }
+
+    #[Route('/importCSV', name: 'app_importCSV')]
+    public function importCSV(CampusRepository $campusRepository, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    {
+
+        $form = $this->createForm(CSVFileImportType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('csv_file')->getData();
+
+
+            if ($file) {
+                $fileName = 'userCSVImport' . uniqid() . '.csv';
+                $newFilePath = $file->move('uploads/csv', $fileName);
+
+                $csv = Reader::createFromPath($newFilePath)->setHeaderOffset(0);
+                $records = $csv->getRecords();
+
+                foreach ($records as $record) {
+
+                    $user = new User();
+                    $campus = $campusRepository->findCampusbyName($record['campus']);
+                    $user->setCampus($campus);
+                    $user->setFirstName($record['firstName']);
+                    $user->setLastName($record['lastName']);
+                    $user->setPseudo($user->getFirstName() . '.' . $user->getLastName());
+                    $user->setEmail($record['email']);
+                    $user->setRoles(['ROLE_USER']);
+                    $user->setPassword('$2y$13$9Q7KWgtUtGeeIIJWDz23NeyMF/oLrzlwTsElSjYfC37kCXvz.xav6');
+                    $user->setPhoneNumber($record['phoneNumber']);
+                    $user->setIsAdmin(0);
+                    $user->setIsActive(1);
+                    $user->setIsVerified(1);
+
+
+                    $entityManager->persist($user);
+
+
+                }
+                $entityManager->flush();
+                $this->addFlash('success', 'Les données du fichier CSV ont été importées avec succès dans la base de données.');
+                return $this->redirectToRoute('app_importCSV');
+            } else {
+                // Handle the case where no file was uploaded (e.g., display an error message)
+                $this->addFlash('error', 'Aucun fichier CSV n\'a été sélectionné.');
+            }
+        }
+
+
+        return $this->render('user/import_csv_file_form.html.twig', [
+            'CSVImportForm' => $form,
         ]);
     }
 

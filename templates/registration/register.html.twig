@@ -9,6 +9,8 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
+    <a href="{{ path('app_importCSV') }}">Importer un fichier CSV </a>
+
     {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}

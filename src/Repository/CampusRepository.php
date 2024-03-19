@@ -36,13 +36,14 @@ class CampusRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Campus
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        public function findCampusbyName(string $name): ?Campus
+        {
+        $query = $this->createQueryBuilder('campus');
+        $query->andWhere('campus.name = :name')
+                ->setParameter(':name', $name)            ;
+
+            return $query->getQuery()->getOneOrNullResult();
+        }
+
+
 }
