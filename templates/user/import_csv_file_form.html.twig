@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Import CSV {% endblock %}
+{% block pageName %}Importer un fichier CSV pour créer de nouveaux utilisateurs en masse{% endblock %}
+
+{% block body %}
+
+    {% if is_granted('IS_AUTHENTICATED') and is_granted('ROLE_ADMIN') %}
+
+    {{ form_start(CSVImportForm) }}
+    {{ form_end(CSVImportForm) }}
+
+    {% endif %}
+
+{% endblock %}
