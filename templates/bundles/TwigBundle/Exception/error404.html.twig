@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %} Page n'existe pas{% endblock %}
+{% block pageName %}La page n'existe pas {% endblock %}
+
+{% block body %}
+
+    <div class="mx-auto">
+    <img
+            class="img-fluid mx-auto d-block"
+            src="{{ asset('images/404error.jpg') }}"
+            alt="Livre avec page arrachées pour erreur 404" />
+    </div>
+{% endblock %}
