@@ -6,7 +6,7 @@
 {% block body %}
 
     {% if app.user.isActive == false %}
-        <h2 >Compte bloqué</h2>
+        <h2>Compte bloqué</h2>
         <p>L'accès de votre compte a été restreint par les administrateurs.</p>
     {% endif %}
 
@@ -17,7 +17,9 @@
                     <th scope="col">Id</th>
                     <th scope="col">Nom </th>
                     <th scope="col">Code postal</th>
-                    <th scope="col">Actions</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
 
                 </tr>
             </thead>
@@ -27,11 +29,12 @@
                     <td >{{ city.id }}</td>
                     <td>{{ city.name }}</td>
                     <td>{{ city.zipCode }}</td>
-                    <td>
-
-                        <a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
-                        <a href="{{ path('app_city_delete', {'id': city.id}) }}">Supprimer</a>
-                    </td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
+                            <a href="{{ path('app_city_delete', {'id': city.id}) }}">Supprimer</a>
+                        </td>
+                    {% endif %}
                 </tr>
             {% else %}
                 <tr>
