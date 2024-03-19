@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/city', name: 'app_city_')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_USER')]
 class CityController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -23,6 +23,7 @@ class CityController extends AbstractController
             'cities' => $cityRepository->findAll(),
         ]);
     }
+
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -44,6 +45,7 @@ class CityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     public function show(City $city): Response
     {
@@ -52,6 +54,7 @@ class CityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
@@ -70,6 +73,7 @@ class CityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {
