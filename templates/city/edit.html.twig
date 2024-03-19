@@ -1,25 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier ville{% endblock %}
+{% block title %}Modifier la ville{% endblock %}
 {% block pageName %}Modifier la ville : {{ city.name }}{% endblock %}
 
 {% block body %}
 
-    {% if app.user.isActive == false %}
-        <h2>Compte bloqué</h2>
-        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
-    {% endif %}
-
-    {% if app.user.isActive == true %}
-        <div class="">
+    <div class="">
         {{ include('city/_form.html.twig', {'button_label': 'Modifier'}) }}
             <br>
         {{ include('city/_delete_form.html.twig') }}
             <br>
         <a href="{{ path('app_city_index') }}">Retour à la liste</a>
-        </div>
-    {% endif %}
-
-    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+    </div>
 
 {% endblock %}

@@ -45,14 +45,14 @@
 
                     {% if is_granted('ROLE_ADMIN') %}
                         {% if user.isActive == true %}
-                        <button type="button" class="btn btn-danger"><a href="{{ url('app_user_disable', {'id': user.id}) }}">Désactiver</a></button>
+                        <a href="{{ url('app_user_disable', {'id': user.id}) }}" class="btn btn-danger">Désactiver</a>
                         {% else %}
-                        <button type="button" class="btn btn-success"><a href="{{ url('app_user_activate', {'id': user.id}) }}">Réactiver</a></button>
+                        <a href="{{ url('app_user_activate', {'id': user.id}) }}" class="btn btn-success">Réactiver</a>
                         {% endif %}
                     {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
-                        <button type="button" class="btn btn-danger" onclick="confirm('Êtes-vous sûr de vouloir supprimer ce profil ?')"><a href="{{ url('app_user_delete', {'id': user.id}) }}">Supprimer</a></button>
+                        <a href="{{ url('app_user_delete', {'id': user.id}) }}" class="btn btn-danger" onclick="confirm('Êtes-vous sûr de vouloir supprimer ce profil ?')">Supprimer</a>
                     {% endif %}
 
                 </div>
