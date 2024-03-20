@@ -13,6 +13,9 @@
                 {{ form_row(form.isParticipant) }}
                 {{ form_row(form.isNotParticipant) }}
             </div>
+            <div class="col md-2">
+                <button type="submit" class="btn btn-lg btn-secondary">Rechercher</button>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-3 mb-2">
@@ -25,12 +28,6 @@
             <div class="col-md-3 mb-2">
                 {{ form_row(form.isOrganizer) }}
                 {{ form_row(form.passedDateTime) }}
-            </div>
-        </div>
-        <div class="row">
-        </div>
-            <div class="col">
-                <button type="submit" class="btn btn-secondary">Rechercher</button>
             </div>
         </div>
     {{ form_end(form) }}
