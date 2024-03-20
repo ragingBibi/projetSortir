@@ -6,8 +6,7 @@
 {% block body %}
 
     {% if app.user.isActive == false %}
-        <h2>Compte bloqué</h2>
-        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
+        {{ include('security/blocked.html.twig') }}
     {% endif %}
 
     {% if app.user.isActive == true %}
