@@ -24,7 +24,6 @@ class CampusController extends AbstractController
         ]);
     }
 
-
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Campus $campus, EntityManagerInterface $entityManager): Response
     {
@@ -63,16 +62,6 @@ class CampusController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Campus $campus): Response
-    {
-        return $this->render('campus/show.html.twig', [
-            'campus' => $campus,
-        ]);
-    }
-
-
 
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Campus $campus, EntityManagerInterface $entityManager): Response

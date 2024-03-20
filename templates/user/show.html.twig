@@ -6,72 +6,78 @@
 
 {% block body %}
 
-    {% if user.picture is not empty %}
-        <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
     {% endif %}
 
-    {% if is_granted('ROLE_ADMIN') and user.isActive == false %}
-        <h2>Le compte de cet utilisateur est désactivé</h2>
-    {% endif %}
+    {% if app.user.isActive == true %}
+        {% if user.picture is not empty %}
+            <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
+        {% endif %}
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>Prénom</th>
-            <td>{{ user.firstName }}</td>
-        </tr>
-        <tr>
-            <th>Nom</th>
-            <td>{{ user.lastName }}</td>
-        </tr>
-        <tr>
-            <th>Numéro de téléphone</th>
-            <td>{{ user.phoneNumber }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <th>Campus</th>
-            <td>{{ user.campus.name}}</td>
-        </tr>
-        </tbody>
-    </table>
+        {% if is_granted('ROLE_ADMIN') and user.isActive == false %}
+            <h2>Le compte de cet utilisateur est désactivé</h2>
+        {% endif %}
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
-
-    {% if is_granted('ROLE_ADMIN') or app.user == user %}
-        <h2>Sorties créées</h2>
         <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie</th>
-                <th scope="col">Clôture</th>
-                <th scope="row">Inscrits / Places</th>
-                <th scope="col">Etat</th>
-                <th scope="col">Détail</th>
-            </tr>
-            </thead>
-
             <tbody>
-            {# Itération sur la liste des events #}
-            {%  for event in organizedEvents %}
-                <tr>
-                    <td>{{ event.name }}</td>
-                    <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
-                    <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
-                    <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
-                    <td>{{ event.status.label }}</td>
-                    <td><a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a></td>
-                </tr>
-            {% endfor %}
+            <tr>
+                <th>Prénom</th>
+                <td>{{ user.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ user.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Numéro de téléphone</th>
+                <td>{{ user.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Campus</th>
+                <td>{{ user.campus.name}}</td>
+            </tr>
             </tbody>
         </table>
+
+        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-primary">Modifier</a>
+
+        {% if is_granted('ROLE_ADMIN') or app.user == user %}
+            <h2>Sorties créées</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Nom de la sortie</th>
+                    <th scope="col">Date de la sortie</th>
+                    <th scope="col">Clôture</th>
+                    <th scope="row">Inscrits / Places</th>
+                    <th scope="col">Etat</th>
+                    <th scope="col">Détail</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {# Itération sur la liste des events #}
+                {%  for event in organizedEvents %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
+                        <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
+                        <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
+                        <td>{{ event.status.label }}</td>
+                        <td><a href=" {{ path('event_details', {'id': event.id}) }}" class="link-secondary">Afficher détail</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     {% endif %}
 
-    <a href="{{ path('app_user_index') }}">Retour à la liste</a>
+    <a href="{{ path('app_user_index') }}" class="link-secondary">Retour à la liste</a>
 
 
 {% endblock %}

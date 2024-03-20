@@ -6,8 +6,7 @@
 {% block body %}
 
     {% if app.user.isActive == false %}
-        <h2>Compte bloqué</h2>
-        <p>L'accès de votre compte a été restreint par les administrateurs.</p>
+        {{ include('security/blocked.html.twig') }}
     {% endif %}
 
     {% if app.user.isActive == true %}
@@ -31,8 +30,8 @@
                     <td>{{ city.zipCode }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            <a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
-                            <a href="{{ path('app_city_delete', {'id': city.id}) }}">Supprimer</a>
+                            <a href="{{ path('app_city_edit', {'id': city.id}) }}" class="btn btn-outline-secondary">Modifier</a>
+                            <a href="{{ path('app_city_delete', {'id': city.id}) }}" class="btn btn-outline-secondary">Supprimer</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -44,7 +43,9 @@
             </tbody>
         </table>
 
-        <a class="btn btn-primary" href="{{ path('app_city_new') }}">Nouvelle ville</a>
+        <a class="btn btn-primary" href="{{ path('app_city_new') }}">Nouvelle ville</a><br>
     {% endif %}
+
+    <a href="{{ path('home_home') }}" class="link-secondary"> Retour à la l'accueil</a>
 
 {% endblock %}

@@ -10,8 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Status;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/event', name: 'status_')]
+#[IsGranted('ROLE_USER', message: 'Vous devez etre connecté pour accéder à cette page')]
 class StatusController extends AbstractController
 {
 

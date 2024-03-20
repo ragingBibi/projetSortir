@@ -20,13 +20,13 @@
         </div>
 
         <div>
-            <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
+            <a href="{{ path('status_delete', {'id': event.id}) }}" class="btn btn-danger">Supprimer</a>
             {% if event.status.label == 'Créé' or event.status.label == 'Annulé' %}
-                <button type="submit"><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+                <a href="{{ path('status_publish', {'id': event.id}) }}" class="btn btn-success">Publier</a>
             {% endif %}
         </div>
     {% endif %}
 
-    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+    <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
 
 {% endblock %}

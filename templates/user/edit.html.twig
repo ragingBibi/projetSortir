@@ -47,7 +47,7 @@
                         {% if user.isActive == true %}
                         <a href="{{ url('app_user_disable', {'id': user.id}) }}" class="btn btn-danger">Désactiver</a>
                         {% else %}
-                        <a href="{{ url('app_user_activate', {'id': user.id}) }}" class="btn btn-success">Réactiver</a>
+                        <a href="{{ url('app_user_activate', {'id': user.id}) }}" class="btn btn-secondary">Réactiver</a>
                         {% endif %}
                     {% endif %}
 
