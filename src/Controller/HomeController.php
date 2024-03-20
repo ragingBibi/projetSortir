@@ -32,25 +32,30 @@ class HomeController extends AbstractController
     #[Route(path: '', name: 'home', methods: ['GET'])]
     public function home(EventRepository $eventRepository, Request $request): Response
     {
-        //On récupère l'utilisateur connecté
-        $user = new User();
-        $user = $this->security->getUser();
-        //On crée le formulaire de recherche
-        $searchData = new SearchData();
-        $form = $this->createForm(EventSearchType::class, $searchData);
-        $form->handleRequest($request);
+        if($this->isGranted("ROLE_USER")) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $events = $eventRepository->findByFilters($searchData, $user);
-        } else {
-            $events = $eventRepository->findAll();
+            //On récupère l'utilisateur connecté
+            $user = new User();
+            $user = $this->security->getUser();
+            //On crée le formulaire de recherche
+            $searchData = new SearchData();
+            $form = $this->createForm(EventSearchType::class, $searchData);
+            $form->handleRequest($request);
 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $events = $eventRepository->findByFilters($searchData, $user);
+            } else {
+                $events = $eventRepository->findAll();
+
+            }
+            return $this->render('home/home.html.twig', [
+                'events' => $events,
+                'form' => $form->createView()
+            ]);
         }
-        return $this->render('home/home.html.twig', [
-            'events' => $events,
-            'form' => $form->createView()
-        ]);
-
+        else{
+            return $this->redirectToRoute('app_login');
+        }
     }
 
     public function getSecurity(): Security
