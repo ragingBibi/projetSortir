@@ -1,34 +1,37 @@
 {% if form is defined %}
-    <div class="row">
-    <div class="col-12 mt-1">
-        {{ form_start(form) }}
-        <div class="form-group mb-4">
-            {{ form_widget(form.keyword) }}
+<div class="container-fluid">
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-4 mb-2">
+                {{ form_widget(form.keyword) }}
+            </div>
+            <div class="col-md-2 mb-2 ml-5">
+                {{ form_widget(form.campus) }}
+            </div>
+            <div class="col-md-1 mb-2"></div>
+            <div class="col-md-3 mb-2">
+                {{ form_row(form.isParticipant) }}
+                {{ form_row(form.isNotParticipant) }}
+            </div>
         </div>
-        <div class="form-group mb-4">
-            {{ form_widget(form.campus) }}
+        <div class="row">
+            <div class="col-md-3 mb-2">
+                {{ form_row(form.beginDateTime) }}
+            </div>
+            <div class="col-md-3 mb-2 ml-5">
+                {{ form_row(form.endDateTime) }}
+            </div>
+            <div class="col-md-1 mb-2"></div>
+            <div class="col-md-3 mb-2">
+                {{ form_row(form.isOrganizer) }}
+                {{ form_row(form.passedDateTime) }}
+            </div>
         </div>
-        <div class="form-group mb-4">
-            {{ form_widget(form.beginDateTime) }}
+        <div class="row">
         </div>
-        <div class="form-group mb-4">
-            {{ form_widget(form.endDateTime) }}
+            <div class="col">
+                <button type="submit" class="btn btn-secondary">Rechercher</button>
+            </div>
         </div>
-        <div>
-            {{ form_widget(form.isOrganizer) }}
-        </div>
-        <div>
-            {{ form_widget(form.isParticipant) }}
-        </div>
-        <div>
-            {{ form_widget(form.isNotParticipant) }}
-        </div>
-        <div>
-            {{ form_widget(form.passedDateTime) }}
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
-        {{ form_end(form) }}
-    </div>
-    </div>
+    {{ form_end(form) }}
 {% endif %}
