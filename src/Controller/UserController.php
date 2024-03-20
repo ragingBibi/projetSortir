@@ -74,38 +74,34 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['GET', 'POST'])]
     public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
     {
 //        $user->setIsActive(false);
-//
-//        $currentDateTime = new \DateTime();
-//
-//        // Désinscrire de tous les évènements futurs
-//        $futureAttendingEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
-//            return $event->getStartingDateTime() > $currentDateTime;
-//        });
-//        foreach ($futureAttendingEvents as $event) {
-//            $user->removeAttendingEventsList($event);
-//            $event->removeUserFromAttendeesList($user);
-//        }
-//
-//        // Supprimer les évennements futurs que l'utilisateur a créé
-//        $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function($event) use ($currentDateTime) {
-//            return $event->getStartingDateTime() > $currentDateTime;
-//        });
-//        foreach ($futureOrganizedEvents as $event) {
-//            $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
-//            $event->setCancellationDate(new \DateTimeImmutable());
-//            $event->setCancellationReason('Le compte de cet utilisateur a été supprimé');
-//
-//            $entityManager->persist($event);
-//        }
-//
-//        $entityManager->remove($user);
-//        $entityManager->flush();
-//
-//        $this->addFlash('success text-center', 'L\'utilisateur a été supprimé');
+
+        $currentDateTime = new \DateTime();
+
+        // Désinscrire de tous les évènements futurs
+        $futureAttendingEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+            return $event->getStartingDateTime() > $currentDateTime;
+        });
+        foreach ($futureAttendingEvents as $event) {
+            $user->removeAttendingEventsList($event);
+            $event->removeUserFromAttendeesList($user);
+        }
+
+        // Supprimer les évennements futurs que l'utilisateur a créé
+        $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function($event) use ($currentDateTime) {
+            return $event->getStartingDateTime() > $currentDateTime;
+        });
+        foreach ($futureOrganizedEvents as $event) {
+            $entityManager->remove($event);
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'L\'utilisateur a été supprimé');
         return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
 
@@ -125,6 +121,18 @@ class UserController extends AbstractController
         foreach ($futureEvents as $event) {
             $user->removeAttendingEventsList($event);
             $event->removeUserFromAttendeesList($user);
+        }
+
+        // Annuler les évennements futurs que l'utilisateur a créé
+        $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function($event) use ($currentDateTime) {
+            return $event->getStartingDateTime() > $currentDateTime;
+        });
+        foreach ($futureOrganizedEvents as $event) {
+            $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
+            $event->setCancellationDate(new \DateTimeImmutable());
+            $event->setCancellationReason('Le compte de cet utilisateur a été désactivé');
+
+            $entityManager->persist($event);
         }
 
         $entityManager->persist($user);
