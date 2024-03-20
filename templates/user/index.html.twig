@@ -21,14 +21,14 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <td><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.pseudo }}</a></td>
+                <td><a href="{{ path('app_user_show', {'id': user.id}) }}" class="link-secondary">{{ user.pseudo }}</a></td>
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.phoneNumber }}</td>
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
-                        <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="link-secondary">Modifier</a>
                         {% if app.user != user %}
                             <input type="checkbox" name="users[]" value="{{ user.id }}">
                         {% endif %}
@@ -52,5 +52,5 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+    <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
 {% endblock %}

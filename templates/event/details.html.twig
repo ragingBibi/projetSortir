@@ -2,9 +2,9 @@
 
 {% block title %}Détails{% endblock %}
 
-{% block body %}
+{% block pageName %}{{ event.name }}{% endblock %}
 
-    <h1>{{ event.name }}</h1>
+{% block body %}
 
     {% if app.user.isActive == false %}
         {{ include('security/blocked.html.twig') }}
@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                     <th>Organisateur</th>
-                    <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}">{{ event.creator.pseudo }}</a></td>
+                    <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}" class="link-secondary">{{ event.creator.pseudo }}</a></td>
                 </tr>
             </tbody>
         </table>
@@ -59,9 +59,9 @@
     {#        On peut s'inscrire si l'envent est publié et que l'utilisateur connectén'est pas l'organisateur#}
             {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
                 {% if app.user in event.attendeesList %}
-                    <button><a href="{{ path('event_unsubscribe', {'id': event.id}) }}">Se désister</a></button>
+                    <a href="{{ path('event_unsubscribe', {'id': event.id}) }}" class="btn btn-primary">Se désister</a>
                 {% else %}
-                    <button><a href="{{ path('event_subscribe', {'id':  event.id}) }}">S'inscrire</a></button>
+                    <a href="{{ path('event_subscribe', {'id':  event.id}) }}" class="btn btn-primary">S'inscrire</a>
                 {% endif %}
             {% endif %}
 
@@ -69,25 +69,28 @@
             {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
     {#            On peut publié uniquement si l'event est Créé #}
                 {% if event.status.label == 'Créé' %}
-                    <button><a href="{{ path('status_publish', {'id': event.id}) }}">Publier</a></button>
+                    <a href="{{ path('status_publish', {'id': event.id}) }}" class="btn btn-primary">Publier</a>
                 {% endif %}
-                <button><a href="{{ path('event_update', {'id': event.id}) }}">Modifier</a></button>
-                <button><a href="{{ path('status_delete', {'id': event.id}) }}">Supprimer</a></button>
+                <a href="{{ path('event_update', {'id': event.id}) }}" class="btn btn-primary">Modifier</a>
+                <a href="{{ path('status_delete', {'id': event.id}) }}" class="btn btn-danger">Supprimer</a>
             {% endif %}
-        </div>
+        </div><br>
 
-        <table>
-            <thead>Participants</thead>
-            <tbody>
-                {% for attendee in attendees %}
-                    <tr>
-                        <td><a href="{{ path('app_user_show', {'id': attendee.id}) }}">{{ attendee.pseudo }}</a></td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% if attendees != null%}
+            <h3>Participants</h3>
+            <table>
+                <tbody>
+                    {% for attendee in attendees %}
+                        <tr>
+                            <td><a href="{{ path('app_user_show', {'id': attendee.id}) }}" class="link-secondary">{{ attendee.pseudo }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
     {% endif %}
 
-    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+    <br>
+    <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
 
 {% endblock %}

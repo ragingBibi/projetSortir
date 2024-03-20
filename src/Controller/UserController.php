@@ -191,6 +191,9 @@ class UserController extends AbstractController
         $usersID = $request->request->get('usersID');
 
         foreach ($usersID as $id) {
+
+            $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+
             $user->setIsActive(false);
 
             // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit

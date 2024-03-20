@@ -35,8 +35,8 @@
                     <td>{{ venue.longitude }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            <a href="{{ path('app_venue_edit', {'id': venue.id}) }}">Modifier</a>
-                            <a href="{{ path('app_venue_delete', {'id': venue.id}) }}">Supprimer</a>
+                            <a href="{{ path('app_venue_edit', {'id': venue.id}) }}" class="link-secondary">Modifier</a>
+                            <a href="{{ path('app_venue_delete', {'id': venue.id}) }}" class="link-secondary">Supprimer</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -53,5 +53,5 @@
         </div>
     {% endif %}
 
-    <a href="{{ path('home_home') }}">Retour à l'accueil</a>
+    <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
 {% endblock %}

@@ -44,7 +44,7 @@
             </tbody>
         </table>
 
-        <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-primary">Modifier</a>
 
         {% if is_granted('ROLE_ADMIN') or app.user == user %}
             <h2>Sorties créées</h2>
@@ -69,7 +69,7 @@
                         <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
                         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
                         <td>{{ event.status.label }}</td>
-                        <td><a href=" {{ path('event_details', {'id': event.id}) }}">Afficher détail</a></td>
+                        <td><a href=" {{ path('event_details', {'id': event.id}) }}" class="link-secondary">Afficher détail</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -77,7 +77,7 @@
         {% endif %}
     {% endif %}
 
-    <a href="{{ path('app_user_index') }}">Retour à la liste</a>
+    <a href="{{ path('app_user_index') }}" class="link-secondary">Retour à la liste</a>
 
 
 {% endblock %}
