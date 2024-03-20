@@ -51,7 +51,7 @@ class EventSearchType extends AbstractType
             ])
             ->add('beginDateTime', DateTimeType::class, [
                 'required' => false,
-                'label' => false,
+                'label' => "Date et heure de début de l'évènement",
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'form-control'
@@ -60,7 +60,7 @@ class EventSearchType extends AbstractType
             ])
             ->add('endDateTime', DateTimeType::class, [
                 'required' => false,
-                'label' => false,
+                'label' => "Date et heure de fin de l'évènement",
                 'widget' => 'single_text',
                 'attr' => [
                     'class' => 'form-control'
