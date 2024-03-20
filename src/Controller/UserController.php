@@ -13,9 +13,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route(path: '/user', name: 'app_user_')]
+#[isGranted('ROLE_USER')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -74,11 +76,10 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/{id}/delete', name: 'delete', methods: ['GET', 'POST'])]
     public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
     {
-//        $user->setIsActive(false);
-
         $currentDateTime = new \DateTime();
 
         // Désinscrire de tous les évènements futurs
@@ -105,6 +106,45 @@ class UserController extends AbstractController
         return $this->redirectToRoute('home_home', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[isGranted('ROLE_ADMIN')]
+    #[Route('/delete-many', name: 'delete_many', methods: ['GET', 'POST'])]
+    public function deleteUsers(User $user, EntityManagerInterface $entityManager, Request $request): Response
+    {
+//        $currentDateTime = new \DateTime();
+//
+//        $usersID = $request->request->get('usersID');
+//
+//        foreach ($usersID as $id) {
+//
+//            $user = $entityManager->getRepository(User::class)->find($id);
+//
+//            // Désinscrire de tous les évènements futurs
+//            $futureAttendingEvents = $user->getAttendingEventsList()->filter(function ($event) use ($currentDateTime) {
+//                return $event->getStartingDateTime() > $currentDateTime;
+//            });
+//            foreach ($futureAttendingEvents as $event) {
+//                $user->removeAttendingEventsList($event);
+//                $event->removeUserFromAttendeesList($user);
+//            }
+//
+//            // Supprimer les évennements futurs que l'utilisateur a créé
+//            $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function ($event) use ($currentDateTime) {
+//                return $event->getStartingDateTime() > $currentDateTime;
+//            });
+//            foreach ($futureOrganizedEvents as $event) {
+//                $entityManager->remove($event);
+//            }
+//
+//            $entityManager->remove($user);
+//        }
+//
+//        $entityManager->flush();
+//
+//        $this->addFlash('success text-center', 'Les utilisateurs ont été supprimés');
+        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/{id}/disable', name: 'disable', methods: ['Get', 'POST'])]
     public function disable(User $user, EntityManagerInterface $entityManager): Response {
 
@@ -142,7 +182,50 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
     }
 
-    // Fonction pour désactiver un utilisateur
+    #[isGranted('ROLE_ADMIN')]
+    #[Route('/disable-many', name: 'disable_many', methods: ['Get', 'POST'])]
+    public function disableUsers(User $user, EntityManagerInterface $entityManager, Request $request): Response {
+
+        $currentDateTime = new \DateTime();
+
+        $usersID = $request->request->get('usersID');
+
+        foreach ($usersID as $id) {
+            $user->setIsActive(false);
+
+            // Récupérer tous les événements futurs auxquels l'utilisateur est inscrit
+            $futureEvents = $user->getAttendingEventsList()->filter(function($event) use ($currentDateTime) {
+                return $event->getStartingDateTime() > $currentDateTime;
+            });
+
+            // Désinscrire l'utilisateur de ces événements
+            foreach ($futureEvents as $event) {
+                $user->removeAttendingEventsList($event);
+                $event->removeUserFromAttendeesList($user);
+            }
+
+            // Annuler les évennements futurs que l'utilisateur a créé
+            $futureOrganizedEvents = $user->getOrganizedEvents()->filter(function($event) use ($currentDateTime) {
+                return $event->getStartingDateTime() > $currentDateTime;
+            });
+            foreach ($futureOrganizedEvents as $event) {
+                $event->setStatus($entityManager->getRepository(Status::class)->findOneBy(['label' => 'Annulé']));
+                $event->setCancellationDate(new \DateTimeImmutable());
+                $event->setCancellationReason('Le compte de cet utilisateur a été désactivé');
+
+                $entityManager->persist($event);
+            }
+
+            $entityManager->persist($user);
+        }
+
+        $entityManager->flush();
+
+        $this->addFlash('success text-center', 'Les utilisateurs ont été désactivés');
+        return $this->redirectToRoute('app_user_index');
+    }
+
+    #[isGranted('ROLE_ADMIN')]
     #[Route('/{id}/activate', name: 'activate', methods: ['Get', 'POST'])]
     public function activate(User $user, EntityManagerInterface $entityManager): Response {
 

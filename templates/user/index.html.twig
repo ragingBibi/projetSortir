@@ -13,21 +13,27 @@
                 <th>Prénom</th>
                 <th>Email</th>
                 <th>Téléphone</th>
-                <th>Actions</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.pseudo }}</td>
+                <td><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.pseudo }}</a></td>
                 <td>{{ user.lastName }}</td>
                 <td>{{ user.firstName }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.phoneNumber }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">Profil</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
-                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <td>
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}">Modifier</a>
+                        {% if app.user != user %}
+                            <input type="checkbox" name="users[]" value="{{ user.id }}">
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -38,5 +44,13 @@
     </table>
 
     <a href="{{ path('app_user_index') }}" class="btn btn-primary">Nouvel utilisateur</a><br>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div>
+            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a>
+{#            <a href="{{ path('app_user_delete_many', {'users': users}) }}" class="btn btn-danger">Supprimer</a>#}
+        </div>
+    {% endif %}
+
     <a href="{{ path('home_home') }}">Retour à l'accueil</a>
 {% endblock %}

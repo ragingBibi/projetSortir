@@ -46,15 +46,6 @@ class CityController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(City $city): Response
-    {
-        return $this->render('city/show.html.twig', [
-            'city' => $city,
-        ]);
-    }
-
-    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, City $city, EntityManagerInterface $entityManager): Response
     {

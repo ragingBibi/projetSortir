@@ -10,9 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/venue', name: 'app_venue_')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_USER')]
 class VenueController extends AbstractController
 {
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -43,14 +44,7 @@ class VenueController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(Venue $venue): Response
-    {
-        return $this->render('venue/show.html.twig', [
-            'venue' => $venue,
-        ]);
-    }
-
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Venue $venue, EntityManagerInterface $entityManager): Response
     {
@@ -69,6 +63,7 @@ class VenueController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}', name: 'delete', methods: ['POST'])]
     public function delete(Request $request, Venue $venue, EntityManagerInterface $entityManager): Response
     {
