@@ -19,7 +19,7 @@
             <h2>Le compte de cet utilisateur est désactivé</h2>
         {% endif %}
 
-        <table class="table">
+        <table class="table table-striped">
             <tbody>
             <tr>
                 <th>Prénom</th>
@@ -48,7 +48,7 @@
 
         {% if is_granted('ROLE_ADMIN') or app.user == user %}
             <h2>Sorties créées</h2>
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Nom de la sortie</th>

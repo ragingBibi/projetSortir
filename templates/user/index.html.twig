@@ -29,9 +29,9 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="link-secondary">Modifier</a>
-                        {% if app.user != user %}
-                            <input type="checkbox" name="users[]" value="{{ user.id }}">
-                        {% endif %}
+{#                        {% if app.user != user %}#}
+{#                            <input type="checkbox" name="users[]" value="{{ user.id }}">#}
+{#                        {% endif %}#}
                     </td>
                 {% endif %}
             </tr>
@@ -45,12 +45,12 @@
 
     <a href="{{ path('app_user_index') }}" class="btn btn-primary">Nouvel utilisateur</a><br>
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <div>
-            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a>
+{#    {% if is_granted('ROLE_ADMIN') %}#}
+{#        <div>#}
+{#            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a>#}
 {#            <a href="{{ path('app_user_delete_many', {'users': users}) }}" class="btn btn-danger">Supprimer</a>#}
-        </div>
-    {% endif %}
+{#        </div>#}
+{#    {% endif %}#}
 
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
 {% endblock %}
