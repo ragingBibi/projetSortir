@@ -10,12 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Status;
+use App\Service\StatusEventService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/event', name: 'status_')]
 #[IsGranted('ROLE_USER', message: 'Vous devez etre connecté pour accéder à cette page')]
 class StatusController extends AbstractController
 {
+
+    private StatusEventService $statusEventService;
+
+    public function __construct(StatusEventService $statusEventService)
+    {
+        $this->statusEventService = $statusEventService;
+    }
+
 
     #[\Symfony\Component\Routing\Attribute\Route('/{id}/publish', name: 'publish', methods: ['GET', 'POST'])]
     public function publish(Event $event, EntityManagerInterface $entityManager): Response
@@ -58,5 +67,28 @@ class StatusController extends AbstractController
         ]);
     }
 
+    //    public function archive(Request $request, Event $event, EntityManagerInterface $entityManager): Response
+//    {
+//
+//    }
+
+/*    public function getSortieService(): StatusEventService
+    {
+        return $this->statusEventService;
+    }*/
+
+
+
+    #[Route('/updateStatus', name: 'update', methods: ['GET', 'POST'])]
+    public function updateStatus(): Response
+    {
+        // Récupération de l'utilisateur
+        $user = $this->getUser();
+
+        // Mise à jour du statut de l'évènement
+        $this->statusEventService->updateStatus();
+
+        return $this->render('home/isok.html.twig');
+    }
 
 }
