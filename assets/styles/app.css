@@ -20,3 +20,13 @@
     height: 25%;
     margin: -7%;
 }
+
+body {
+    background-color: #d2f9f1;
+}
+
+.csv {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
