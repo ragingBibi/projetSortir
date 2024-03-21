@@ -88,7 +88,8 @@ class StatusController extends AbstractController
         // Mise à jour du statut de l'évènement
         $this->statusEventService->updateStatus();
 
-        return $this->render('home/isok.html.twig');
+        $this->addFlash('success', 'Le statut des évènements a bien été mis à jour');
+        return $this->redirectToRoute('home_home');
     }
 
 }

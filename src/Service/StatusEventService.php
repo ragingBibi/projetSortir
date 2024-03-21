@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Event;
 use App\Entity\Status;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 
 class StatusEventService
@@ -18,41 +19,50 @@ class StatusEventService
     public function updateStatus(): void
     {
         // Objet référentiel date du jour
-        $now = new \DateTime('now');
-        $archiveDate = $now->modify('-1 month');
+        $utz = new \DateTimeZone('Europe/Paris');
+        $now = new DateTime('now', $utz);
 
-        // Sélection de tous les events disponibles en db
+
+        // Sélection de tous les events disponibles en base de données
         $events = $this->entityManager->getRepository(Event::class)->findAll();
 
         // Lecture des évènements
         foreach ($events as $event) {
-            // Récupération des dates de chaque évènement
-            $startEvent = $event->getStartingDateTime();
-            $duration = $event->getDuration();
-            $endEvent = $startEvent->add($duration);
+            // $startEvent contient la date de début de l'évènement retranché de sa durée
+            $startEvent = $event->getStartingDateTime()->sub($event->getDuration());
+            // $fullEventTime contient l'ensemble de la date de début + sa durée
+            $fullEventTime = $event->getStartingDateTime();
+            // $cloture contient la date de clôture de l'évènement
             $cloture = $event->getRegistrationDeadline();
 
-
-            // Mise à jour du statut de l'event  ouvert -> clôturé
-            if ($now > $cloture && $event->getStatus()->getId(2)) {
-                $event->setStatus($this->entityManager->getRepository(Status::class)->find(3));
+            switch ($event->getStatus()->getId()) {
+                case 2 :
+                    // Si la date de clôture est dépassée, on le passe en 'Clôturé'
+                    if ($now > $cloture) {
+                        $event->setStatus($this->entityManager->getRepository(Status::class)->find(3));
+                    }
+                    break;
+                case 3 :
+                    // Si l'évènement a débuté et que la date de clôture est dépassée, on l'actualise en 'En cours'
+                    if ($now >= $startEvent && $now > $cloture) {
+                        $event->setStatus($this->entityManager->getRepository(Status::class)->find(4));
+                    }
+                    break;
+                case 4 :
+                    // Si l'évènement est terminé, on l'actualise en 'Passé'
+                    if ($fullEventTime < $now) {
+                        $event->setStatus($this->entityManager->getRepository(Status::class)->find(5));
+                    }
+                    break;
+                case 5 || 6 :
+                    // Si l'évènement est daté de plus d'un mois, on l'archive
+                    $archiveDate = clone $now->modify('-1 month');
+                    if ($archiveDate >= $startEvent) {
+                        $event->setStatus($this->entityManager->getRepository(Status::class)->find(7));
+                    }
+                    break;
             }
 
-            // Mise à jour du statut de l'event clôturé -> en cours
-            if ($now >= $startEvent && $now > $cloture && $event->getStatus()->getId(3)) {
-                $event->setStatus($this->entityManager->getRepository(Status::class)->find(4));
-            }
-
-            // Mise à jour du statut de l'event en cours -> fini
-            if ($now >= $endEvent && $event->getStatus()->getId(4)) {
-                $event->setStatus($this->entityManager->getRepository(Status::class)->find(5));
-            }
-
-            // Mise à jour du statut de l'évènement fini/annulé (>=1mois) -> archivé
-            if ($archiveDate >= $startEvent && $event->getStatus()->getId(5 | 6)) {
-                $event->setStatus($this->entityManager->getRepository(Status::class)->find(7));
-
-            }
             $this->entityManager->persist($event);
 
         }
