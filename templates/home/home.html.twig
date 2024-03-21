@@ -75,7 +75,7 @@
 
                     {#                    Si event pas publié ni annulé on peut publier #}
                                     {% if (event.status.label == 'Créé')%}
-                                        <a href="{{ path('status_publish', {'id': event.id}) }}" class="link-secondary">Publier</a>
+                                        <a href="{{ path('status_publish', {'id': event.id}) }}" class="btn btn-outline-secondary">Publier</a>
                                     {% endif %}
 
                     {#                   On peut modifier et annuler jusqu'au jour J #}
