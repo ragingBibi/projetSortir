@@ -10,6 +10,7 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
+<div class="container mb-4 p-4">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -31,7 +32,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
                             <a href="{{ path('app_city_edit', {'id': city.id}) }}" class="btn btn-outline-secondary">Modifier</a>
-                            <a href="{{ path('app_city_delete', {'id': city.id}) }}" class="btn btn-outline-secondary">Supprimer</a>
+                            <a href="{{ path('app_city_delete', {'id': city.id}) }}" class="btn btn-outline-danger mx-3">Supprimer</a>
                         </td>
                     {% endif %}
                 </tr>
@@ -43,9 +44,9 @@
             </tbody>
         </table>
 
-        <a class="btn btn-primary" href="{{ path('app_city_new') }}">Nouvelle ville</a><br>
+        <a class="btn btn-primary mx-4 my-3"  href="{{ path('app_city_new') }}">Nouvelle ville</a>
     {% endif %}
 
-    <a href="{{ path('home_home') }}" class="link-secondary"> Retour à la l'accueil</a>
-
+    <a href="{{ path('home_home') }}" class="link-secondary"> Retour à l'accueil</a>
+    </div>
 {% endblock %}

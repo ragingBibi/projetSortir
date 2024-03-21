@@ -11,6 +11,7 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
+<div class="container mb-4 p-4">
         <table class="table table-striped">
             <tbody>
                 <tr>
@@ -92,5 +93,5 @@
 
     <br>
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
-
+    </div>
 {% endblock %}

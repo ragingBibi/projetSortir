@@ -1,21 +1,23 @@
-{%  extends "base.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% form_theme create_event_form 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}{{ parent() }}: Nouvel évenement{% endblock %}
+{% block title %}{{ parent() }}: Nouvel évènement{% endblock %}
 
-{% block pageName %}Créer un évenement{% endblock %}
+{% block pageName %}Créer un évènement{% endblock %}
 
 {% block body %}
 
     {% if app.user.isActive == false %}
         {{ include('security/blocked.html.twig') }}
     {% endif %}
+    <div class="container rounded bg-white mt-5 mb-5 w-50 p-5">
 
     {% if app.user.isActive == true %}
-        <div class="flex justify-content">
-            {{ form(create_event_form) }}
+
+        {{ form(create_event_form) }}
         </div>
+
     {% endif %}
 
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>

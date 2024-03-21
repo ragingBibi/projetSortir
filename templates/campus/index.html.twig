@@ -5,6 +5,7 @@
 {% block pageName %}Liste des sites{% endblock %}
 
 {% block body %}
+<div class="container mb-4 p-4">
        <table class="table table-striped">
         <thead>
             <tr>
@@ -20,7 +21,7 @@
                 <td>{{ campus.name }}</td>
                 <td>
                     <a href="{{ path('app_campus_edit', {'id': campus.id}) }}" class="btn btn-outline-secondary"> Modifier </a>
-                    <a href="{{ path('app_campus_delete', {'id': campus.id}) }}" class="btn btn-outline-secondary"> Supprimer </a>
+                        <a href="{{ path('app_campus_delete', {'id': campus.id}) }}" class="btn btn-outline-danger mx-3"> Supprimer </a>
                 </td>
             </tr>
         {% else %}
@@ -31,7 +32,8 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary"  href="{{ path('app_campus_new') }}"> Nouveau site</a><br>
+    <a class="btn btn-primary mx-4 my-3"  href="{{ path('app_campus_new') }}"> Nouveau site</a>
 
     <a href="{{ path('home_home') }}" class="link-secondary"> Retour à la l'accueil</a>
+</div>
 {% endblock %}

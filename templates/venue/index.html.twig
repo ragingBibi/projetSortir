@@ -10,19 +10,20 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
+        <div class="container-sm w-50 mt-4">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nom </th>
-                    <th scope="col">Rue </th>
-                    <th scope="col">Ville</th>
-                    <th scope="col">Latitude</th>
-                    <th scope="col">Longitude</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th scope="col">Actions</th>
-                    {% endif %}
-                </tr>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Rue</th>
+                <th scope="col">Ville</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th scope="col">Actions</th>
+                {% endif %}
+            </tr>
             </thead>
             <tbody>
             {% for venue in venues %}
@@ -35,8 +36,9 @@
                     <td>{{ venue.longitude }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            <a href="{{ path('app_venue_edit', {'id': venue.id}) }}" class="link-secondary">Modifier</a>
-                            <a href="{{ path('app_venue_delete', {'id': venue.id}) }}" class="link-secondary">Supprimer</a>
+                            <a href="{{ path('app_venue_edit', {'id': venue.id}) }}" class="btn btn-outline-secondary">Modifier</a>
+                            <a href="{{ path('app_venue_delete', {'id': venue.id}) }}" class="btn btn-outline-danger mx-3">Supprimer</a>
+
                         </td>
                     {% endif %}
                 </tr>
@@ -49,9 +51,10 @@
         </table>
 
         <div>
-            <a class="btn btn-primary"  href="{{ path('app_venue_new') }}">Nouveau lieu</a>
-        </div>
+        <a class="btn btn-primary mx-4 my-3" href="{{ path('app_venue_new') }}">Nouveau lieu</a>
     {% endif %}
 
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
+    </div>
+    </div>
 {% endblock %}

@@ -5,8 +5,9 @@
 {% block pageName %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
-    <table class="table table-striped">
-        <thead>
+    <div class="container mb-4 p-4">
+        <table class="table table-striped">
+            <thead>
             <tr>
                 <th>Pseudo</th>
                 <th>Nom</th>
@@ -17,40 +18,42 @@
                     <th>Actions</th>
                 {% endif %}
             </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td><a href="{{ path('app_user_show', {'id': user.id}) }}" class="link-secondary">{{ user.pseudo }}</a></td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.phoneNumber }}</td>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <td>
-                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="link-secondary">Modifier</a>
-{#                        {% if app.user != user %}#}
-{#                            <input type="checkbox" name="users[]" value="{{ user.id }}">#}
-{#                        {% endif %}#}
-                    </td>
-                {% endif %}
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="12">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{{ path('app_user_show', {'id': user.id}) }}"
+                           class="link-secondary">{{ user.pseudo }}</a></td>
+                    <td>{{ user.lastName }}</td>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phoneNumber }}</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-outline-secondary">Modifier</a>
+                            {#                        {% if app.user != user %} #}
+                            {#                            <input type="checkbox" name="users[]" value="{{ user.id }}"> #}
+                            {#                        {% endif %} #}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="12">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_user_index') }}" class="btn btn-primary">Nouvel utilisateur</a><br>
+        <a href="{{ path('app_register') }}" class="btn btn-primary mx-4 my-3">Nouvel utilisateur</a>
 
-{#    {% if is_granted('ROLE_ADMIN') %}#}
-{#        <div>#}
-{#            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a>#}
-{#            <a href="{{ path('app_user_delete_many', {'users': users}) }}" class="btn btn-danger">Supprimer</a>#}
-{#        </div>#}
-{#    {% endif %}#}
+        {#    {% if is_granted('ROLE_ADMIN') %} #}
+        {#        <div> #}
+        {#            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a> #}
+        {#            <a href="{{ path('app_user_delete_many', {'users': users}) }}" class="btn btn-danger">Supprimer</a> #}
+        {#        </div> #}
+        {#    {% endif %} #}
 
-    <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
+        <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
+    </div>
 {% endblock %}

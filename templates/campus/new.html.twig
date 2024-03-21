@@ -4,8 +4,7 @@
 {% block pageName %}Créer un nouveau site {% endblock %}
 
 {% block body %}
-
+<div class="container-sm w-25 mt-4">
     {{ include('campus/_form.html.twig') }}
-
-    <a href="{{ path('app_campus_index') }}" class="link-secondary"> Retour à la liste </a>
+</div>
 {% endblock %}

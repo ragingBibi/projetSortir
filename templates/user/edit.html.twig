@@ -5,7 +5,11 @@
 {% block pageName %}Mon profil{% endblock %}
 
 {% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
 
+    {{ form_errors(form) }}
     {{ form_start(form) }}
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
@@ -45,14 +49,16 @@
 
                     {% if is_granted('ROLE_ADMIN') %}
                         {% if user.isActive == true %}
-                        <a href="{{ url('app_user_disable', {'id': user.id}) }}" class="btn btn-danger">Désactiver</a>
+                            <a href="{{ url('app_user_disable', {'id': user.id}) }}"
+                               class="btn btn-danger">Désactiver</a>
                         {% else %}
-                        <a href="{{ url('app_user_activate', {'id': user.id}) }}" class="btn btn-secondary">Réactiver</a>
+                            <a href="{{ url('app_user_activate', {'id': user.id}) }}" class="btn btn-secondary">Réactiver</a>
                         {% endif %}
                     {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ url('app_user_delete', {'id': user.id}) }}" class="btn btn-danger" onclick="confirm('Êtes-vous sûr de vouloir supprimer ce profil ?')">Supprimer</a>
+                        <a href="{{ url('app_user_delete', {'id': user.id}) }}" class="btn btn-danger"
+                           onclick="confirm('Êtes-vous sûr de vouloir supprimer ce profil ?')">Supprimer</a>
                     {% endif %}
 
                 </div>

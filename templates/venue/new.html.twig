@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouveau lieu {% endblock %}
-{% block pageName %}Créer un nouveau lieu d'événement{% endblock %}
+{% block pageName %}Créer un nouveau lieu d'évènement{% endblock %}
 
 {% block body %}
 
@@ -10,10 +10,12 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
+        <div class="container-sm w-25 mt-4">
         {{ include('venue/_form.html.twig') }}
+
     {% endif %}
 
     <a href="{{ path('app_venue_index') }}" class="link-secondary">Retour à la liste</a>
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
-
+    </div>
 {% endblock %}

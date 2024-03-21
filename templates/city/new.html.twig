@@ -11,10 +11,12 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
-        {{ include('city/_form.html.twig') }}
+        <div class="container-sm w-25 mt-4">
+            {{ include('city/_form.html.twig') }}
+
     {% endif %}
 
     <a href="{{ path('app_city_index') }}" class="link-secondary">Retour à la liste</a>
     <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
-
+    </div>
 {% endblock %}
