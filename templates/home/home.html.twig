@@ -80,8 +80,8 @@
 
                     {#                   On peut modifier et annuler jusqu'au jour J #}
                                     {% if event.status.label == 'Créé' or event.status.label == 'Ouvert' or event.status.label == 'Clôturé' %}
-                                        <a href="{{ path('event_update', {'id': event.id}) }}" class="link-secondary">Modifier</a>
-                                        <a href="{{ path('status_delete', {'id': event.id}) }}" class="link-secondary">Annuler</a>
+                                        <a href="{{ path('event_update', {'id': event.id}) }}" class="btn btn-outline-secondary">Modifier</a>
+                                        <a href="{{ path('status_delete', {'id': event.id}) }}" class="btn btn-outline-danger">Annuler</a>
                                     {% endif %}
                                 {% endif %}
 
