@@ -2,28 +2,35 @@
 
 {% block title %}Nouvel utilisateur{% endblock %}
 
-{% block pageName %}Inscription{% endblock %}
+{% block pageName %}Inscription nouvel utilisateur {% endblock %}
 
 {% block body %}
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
-    <a href="{{ path('app_importCSV') }}" class="btn btn-secondary csv">Importer un fichier CSV </a>
-
     {{ form_errors(registrationForm) }}
-
     {{ form_start(registrationForm) }}
+    <div class="container rounded bg-white w-50 mt-5 mb-5 p-5">
+        <a href="{{ path('app_importCSV') }}" class="btn btn-secondary csv">Importer un fichier CSV</a>
+        <div class="d-flex flex-column align-items-left mb-5">
+            <div class="row mt-1">
+                {{ form_row(registrationForm.pseudo, { label: 'Pseudo', attr: { placeholder: 'Sera créé automatiquement' } , disabled: true}) }}
+                {{ form_row(registrationForm.firstName, { label: 'Prénom' }) }}
+                {{ form_row(registrationForm.lastName, { label: 'Nom' }) }}
+            </div>
+            <div class="row mt-1">
+                {{ form_row(registrationForm.phoneNumber, { label: 'N° de téléphone' }) }}
+                {{ form_row(registrationForm.email, { label: 'Email' }) }}
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Mot de passe'
+                }) }}
+                <div class="row mt-1">
+                    {{ form_row(registrationForm.campus) }}
+                </div>
+            </div>
+            {{ form_end(registrationForm) }}
 
-    {{ form_row(registrationForm.pseudo, { label: 'Pseudo' }) }}
-    {{ form_row(registrationForm.lastName, { label: 'Nom' }) }}
-    {{ form_row(registrationForm.firstName, { label: 'Prénom' }) }}
-    {{ form_row(registrationForm.phoneNumber, { label: 'N° de téléphone' }) }}
-        {{ form_row(registrationForm.email, { label: 'Email' }) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Mot de passe'
-        }) }}
-    {{ form_row(registrationForm.campus) }}
-
-    {{ form_end(registrationForm) }}
+        </div>
+    </div>
 {% endblock %}

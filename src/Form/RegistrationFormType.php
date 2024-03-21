@@ -28,8 +28,8 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', TextType::class, [
                     'label' => 'Adresse email',
-                    'row_attr' => [
-                        'class' => 'col-md-12 mb-3'],
+/*                    'row_attr' => [
+                        'class' => 'col-md-12 mb-3'],*/
                     'constraints' => [
                         new NotBlank([
                             'message' => 'La saisie de l\'email est obligatoire'],
@@ -38,8 +38,8 @@ class RegistrationFormType extends AbstractType
             )
             ->add('picture_file', FileType::class, [
                 'label' => 'Photo de profil',
-                'row_attr' => [
-                    'class' => 'col-md-2 mb-3'],
+/*                'row_attr' => [
+                    'class' => 'col-md-2 mb-3'],*/
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
@@ -56,8 +56,8 @@ class RegistrationFormType extends AbstractType
                 ]])
             ->add('pseudo', TextType::class, [
                 'label' => 'Pseudo',
-                'row_attr' => [
-                    'class' => 'col-md-12 mb-3'],
+/*                'row_attr' => [
+                    'class' => 'col-md-12 mb-3'],*/
                 'constraints' => [
                     /**
                      * new Regex([
@@ -68,8 +68,8 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Nom',
-                'row_attr' => [
-                    'class' => 'col-md-6 mb-3'],
+/*                'row_attr' => [
+                    'class' => 'col-md-6 mb-3'],*/
                 'constraints' => [
                     /*new Regex([
                         'pattern' => '^([a-zA-Z]{2,50})$',
@@ -79,8 +79,8 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'Prénom',
-                'row_attr' => [
-                    'class' => 'col-md-6 mb-3']
+/*                'row_attr' => [
+                    'class' => 'col-md-6 mb-3']*/
             ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
@@ -107,8 +107,8 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les mots de passe ne sont pas identiques',
             ])
             ->add('phoneNumber', TextType::class, [
-                'row_attr' => [
-                    'class' => 'col-md-12 mb-3'],
+/*                'row_attr' => [
+                    'class' => 'col-md-12 mb-3'],*/
                 'label' => 'Téléphone',
                 /*'constraints' => [
                     new Regex([
@@ -118,13 +118,13 @@ class RegistrationFormType extends AbstractType
             ])*/
             ])
             ->add('campus', EntityType::class, [
-                'label' => 'Mon campus',
+                'label' => 'Sélection campus',
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'multiple' => false,
             ])
             ->add("submit", SubmitType::class, [
-                'label' => 'Enregistrer'
+                'label' => 'Enregistrer',
             ]);
         /**
          * ->add('isAdmin', EntityType::class,[

@@ -2,7 +2,7 @@
 
 {% block title %}{{ user.pseudo }}{% endblock %}
 
-{% block pageName %}{{ user.pseudo }}{% endblock %}
+{% block pageName %} Profil de {{ user.pseudo }}{% endblock %}
 
 {% block body %}
 
@@ -11,41 +11,52 @@
     {% endif %}
 
     {% if app.user.isActive == true %}
-        {% if user.picture is not empty %}
-            <img src='{{ asset('uploads/' ~ user.picture) }}' alt='votre image de profil' width='50px'/>
-        {% endif %}
-
-        {% if is_granted('ROLE_ADMIN') and user.isActive == false %}
-            <h2>Le compte de cet utilisateur est désactivé</h2>
-        {% endif %}
-
-        <table class="table table-striped">
-            <tbody>
-            <tr>
-                <th>Prénom</th>
-                <td>{{ user.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ user.lastName }}</td>
-            </tr>
-            <tr>
-                <th>Numéro de téléphone</th>
-                <td>{{ user.phoneNumber }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Campus</th>
-                <td>{{ user.campus.name}}</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-primary">Modifier</a>
-
+        <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-5 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-1">
+                    {% if user.picture is not empty %}
+                        <img class="rounded-circle mt-5" width="180px" src='{{ asset('uploads/' ~ user.picture) }}'
+                             alt='votre image de profil'/>
+                    {% else %}
+                        <img class="rounded-circle mt-5" width="180px"
+                             src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"
+                    {% endif %}
+                </div>
+            </div>
+            {% if is_granted('ROLE_ADMIN') and user.isActive == false %}
+                <h2>Le compte de cet utilisateur est désactivé</h2>
+            {% endif %}
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <th>Prénom</th>
+                            <td>{{ user.firstName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom</th>
+                            <td>{{ user.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Numéro de téléphone</th>
+                            <td>{{ user.phoneNumber }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Campus</th>
+                            <td>{{ user.campus.name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-primary ">Modifier</a>
+                </div>
+            </div>
+        </div>
         {% if is_granted('ROLE_ADMIN') or app.user == user %}
             <h2>Sorties créées</h2>
             <table class="table table-striped">
@@ -62,18 +73,22 @@
 
                 <tbody>
                 {# Itération sur la liste des events #}
-                {%  for event in organizedEvents %}
+                {% for event in organizedEvents %}
                     <tr>
                         <td>{{ event.name }}</td>
-                        <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
-                        <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
+                        <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr') }}</td>
+                        <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr') }}</td>
                         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
                         <td>{{ event.status.label }}</td>
-                        <td><a href=" {{ path('event_details', {'id': event.id}) }}" class="btn btn-secondary">Détail</a></td>
+                        <td><a href=" {{ path('event_details', {'id': event.id}) }}"
+                               class="btn btn-outline-secondary">Détail</a>
+                        </td>
                     </tr>
                 {% endfor %}
-                </tbody>
+
             </table>
+            </div>
+
         {% endif %}
     {% endif %}
 
