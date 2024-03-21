@@ -44,7 +44,7 @@ class StatusEventService
             }
 
             // Mise à jour du statut de l'event en cours -> fini
-            if ($now >= $startEvent && $event->getStatus()->getId(4)) {
+            if ($now >= $endEvent && $event->getStatus()->getId(4)) {
                 $event->setStatus($this->entityManager->getRepository(Status::class)->find(5));
             }
 
