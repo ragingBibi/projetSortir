@@ -69,7 +69,7 @@
                         <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
                         <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
                         <td>{{ event.status.label }}</td>
-                        <td><a href=" {{ path('event_details', {'id': event.id}) }}" class="link-secondary">Afficher détail</a></td>
+                        <td><a href=" {{ path('event_details', {'id': event.id}) }}" class="btn btn-secondary">Détail</a></td>
                     </tr>
                 {% endfor %}
                 </tbody>
