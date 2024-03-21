@@ -30,6 +30,7 @@ class Event
     private ?\DateInterval $duration = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan('now', message: 'La date doit être ultérieure au temps actuel')]
     #[Assert\LessThan(propertyPath: 'startingDateTime', message: 'Cette date ne peut pas être postérieure à la date de l\'évenement')]
     private ?\DateTimeInterface $registrationDeadline = null;
 
