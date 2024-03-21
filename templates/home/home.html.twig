@@ -9,86 +9,89 @@
 
 {% block body %}
 
-<table class="table table-striped">
-    <thead>
-    <tr>
-        <th scope="col">Nom de la sortie</th>
-        <th scope="col">Date de la sortie</th>
-        <th scope="col">Clôture</th>
-        <th scope="row">Inscrits / Places</th>
-        <th scope="col">Etat</th>
-        <th scope="col">Organisateur</th>
-        {% if is_granted('ROLE_USER') %}
-            <th scope="col">Inscrit</th>
-            <th scope="col">Actions</th>
-        {% endif %}
-    </tr>
-    </thead>
-    <tbody>
-    {# Itération sur la liste des events #}
-    {%  for event in events %}
-        {% if (event.status.id != 7) %}
+    {% if app.user.isActive == false %}
+        {{ include('security/blocked.html.twig') }}
+    {% endif %}
+
+    {% if app.user.isActive == true %}
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{ event.name }}</td>
-                <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
-                <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
-                <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
-                <td>{{ event.status.label }}</td>
-                <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}" class="link-secondary">{{ event.creator.pseudo }}</a></td>
-
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie</th>
+                <th scope="col">Clôture</th>
+                <th scope="row">Inscrits / Places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Organisateur</th>
                 {% if is_granted('ROLE_USER') %}
-                    {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
-                    <td>
-                        {% if app.user is same as(event.creator) %}
-
-                            <p>Auteur</p>
-
-                        {% elseif app.user in event.attendeesList %}
-
-                            <p>x</p>
-
-                        {% else %}
-
-                            non
-                        {% endif %}
-                    </td>
-
-                    <td>
-                        <a href=" {{ path('event_details', {'id': event.id}) }}" class="btn btn-secondary">Détail</a>
-
-                        {#                Si pas créateur ni inscrit et event publié on peut s'inscrire #}
-                        {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
-                            {% if app.user in event.attendeesList %}
-                                <a href="{{ path('event_unsubscribe', {'id': event.id}) }}" class="link-secondary">Se désister</a>
-                            {% else %}
-                                <a href="{{ path('event_subscribe', {'id': event.id}) }}" class="link-secondary">S'inscrire</a>
-                            {% endif %}
-                        {% endif %}
-
-                        {# Si l'utilisateur est un désactivé, il n'a accès qu'au détail #}
-                        {% if app.user.isActive == true %}
-            {#                Modification, publication et annulation autorisée pour créateur #}
-                            {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
-
-            {#                    Si event pas publié ni annulé on peut publier #}
-                                {% if (event.status.label == 'Créé')%}
-                                    <a href="{{ path('status_publish', {'id': event.id}) }}" class="link-secondary">Publier</a>
-                                {% endif %}
-
-            {#                    On peut modifier et annuler jusqu'au jour J #}
-                                {% if event.status.label == 'Créé' or event.status.label == 'Ouvert' or event.status.label == 'Clôturé' %}
-                                    <a href="{{ path('event_update', {'id': event.id}) }}" class="link-secondary">Modifier</a>
-                                    <a href="{{ path('status_delete', {'id': event.id}) }}" class="link-secondary">Annuler</a>
-                                {% endif %}
-                            {% endif %}
-
-                        {% endif %}
-                    </td>
+                    <th scope="col">Inscrit</th>
+                    <th scope="col">Actions</th>
                 {% endif %}
             </tr>
-        {% endif %}
-    {% endfor %}
-    </tbody>
-</table>
+            </thead>
+            <tbody>
+            {# Itération sur la liste des events #}
+            {%  for event in events %}
+                {% if (event.status.id != 7) %}
+                    <tr>
+                        <td>{{ event.name }}</td>
+                        <td>{{ event.startingDateTime | format_datetime('medium', 'short', locale='fr')}}</td>
+                        <td>{{ event.registrationDeadline | format_datetime('medium', 'short', locale='fr')}}</td>
+                        <td>{{ event.attendeesList|length }} / {{ event.maxAttendees }} </td>
+                        <td>{{ event.status.label }}</td>
+                        <td><a href="{{ path('app_user_show', {'id': event.creator.id}) }}" class="link-secondary">{{ event.creator.pseudo }}</a></td>
+
+                        {% if is_granted('ROLE_USER') %}
+                            {# on modifie l'affchage selon qu'on est le créateur de la sortie OU qu'on est inscrit à la sortie ou non #}
+                            <td>
+                                {% if app.user is same as(event.creator) %}
+
+                                    <p>Auteur</p>
+
+                                {% elseif app.user in event.attendeesList %}
+
+                                    <p>x</p>
+
+                                {% else %}
+
+                                    non
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                <a href=" {{ path('event_details', {'id': event.id}) }}" class="btn btn-secondary">Détail</a>
+
+                                {#                Si pas créateur ni inscrit et event publié on peut s'inscrire #}
+                                {% if event.creator.id != app.user.id and event.status.label == 'Ouvert'%}
+                                    {% if app.user in event.attendeesList %}
+                                        <a href="{{ path('event_unsubscribe', {'id': event.id}) }}" class="link-secondary">Se désister</a>
+                                    {% else %}
+                                        <a href="{{ path('event_subscribe', {'id': event.id}) }}" class="link-secondary">S'inscrire</a>
+                                    {% endif %}
+                                {% endif %}
+
+                    {#                Modification, publication et annulation autorisée pour créateur #}
+                                {% if (is_granted('ROLE_ADMIN') or (app.user == event.creator)) %}
+
+                    {#                    Si event pas publié ni annulé on peut publier #}
+                                    {% if (event.status.label == 'Créé')%}
+                                        <a href="{{ path('status_publish', {'id': event.id}) }}" class="link-secondary">Publier</a>
+                                    {% endif %}
+
+                    {#                   On peut modifier et annuler jusqu'au jour J #}
+                                    {% if event.status.label == 'Créé' or event.status.label == 'Ouvert' or event.status.label == 'Clôturé' %}
+                                        <a href="{{ path('event_update', {'id': event.id}) }}" class="link-secondary">Modifier</a>
+                                        <a href="{{ path('status_delete', {'id': event.id}) }}" class="link-secondary">Annuler</a>
+                                    {% endif %}
+                                {% endif %}
+
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 {% endblock %}
