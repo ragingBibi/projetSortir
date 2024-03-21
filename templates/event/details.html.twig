@@ -66,7 +66,7 @@
             {% endif %}
 
     {#        On peut modifier et supprimer un evenement si l'utilisateur connecté est l'organisateur ou l'admin #}
-            {% if event.status.label != 'Annulé' and is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id) %}
+            {% if event.status.label != 'Annulé' and (is_granted('ROLE_ADMIN') or (event.creator.id == app.user.id)) %}
     {#            On peut publié uniquement si l'event est Créé #}
                 {% if event.status.label == 'Créé' %}
                     <a href="{{ path('status_publish', {'id': event.id}) }}" class="btn btn-primary">Publier</a>
@@ -76,7 +76,7 @@
             {% endif %}
         </div><br>
 
-        {% if attendees != null%}
+        {% if attendees != null and event.status.label != 'Annulé' %}
             <h3>Participants</h3>
             <table>
                 <tbody>

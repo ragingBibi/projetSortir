@@ -53,6 +53,10 @@ class EventController extends AbstractController
     {
         $attendees = $event->getAttendeesList();
 
+        if ($event->getStatus()->getLabel() == 'Annulé') {
+           $this->addFlash('warning', 'Cet évènement est annulé');
+        }
+
         return $this->render('event/details.html.twig', [
             'event' => $event,
             'attendees' => $attendees

@@ -35,6 +35,10 @@ class UserController extends AbstractController
     {
         $organizedEvents = $user->getOrganizedEvents();
 
+        if ($user->isIsActive() == false) {
+            $this->addFlash('warning', 'Le compte de cet utilisateur a été désactivé par les administrateurs.');
+        }
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
             'organizedEvents' => $organizedEvents
