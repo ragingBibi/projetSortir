@@ -17,9 +17,12 @@
 <body id="page-top">
 
 <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top " id="mainNav">
-    <div class="container d-flex justify-content-start align-items-left">
-
+    <div class="logo">
+        <img src="{{ asset('images/logo-JLB.png') }}" alt="logo" class="logo-img">
         <a class="navbar-brand" href="{{ path('home_home') }}">Jet:Lagged:Brains</a>
+    </div>
+
+    <div class="container d-flex justify-content-start align-items-left">
 
         <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
@@ -56,8 +59,13 @@
                                                          href="{{ path('app_login') }}">Connexion</a></li>
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED') %}
-                    <li class="input-group-text"><a href="{{ path('app_user_edit', { 'id': app.user.id }) }}">{{ app.user.pseudo }}</a></li>
-                    <li class=" input-group-text"> {{ "now"|date('d-m-Y')}} </li>
+                    <li class="profile-token">
+{#                        {% if app.user.picture %}#}
+{#                            <img src="{{ asset('images/profile/' ~ app.user.picture) }}" alt="profil" >#}
+{#                        {% endif %}#}
+                        <a href="{{ path('app_user_edit', { 'id': app.user.id }) }}">{{ app.user.pseudo }}</a>
+                    </li>
+                    <li class="profile-token"> {{ "now"|date('d-m-Y')}} </li>
                 {% endif %}
 
             </ul>
