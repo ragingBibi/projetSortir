@@ -31,9 +31,6 @@
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
                             <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-outline-secondary">Modifier</a>
-                            {#                        {% if app.user != user %} #}
-                            {#                            <input type="checkbox" name="users[]" value="{{ user.id }}"> #}
-                            {#                        {% endif %} #}
                         </td>
                     {% endif %}
                 </tr>
@@ -46,13 +43,6 @@
         </table>
 
         <a href="{{ path('app_register') }}" class="btn btn-primary mx-4 my-3">Nouvel utilisateur</a>
-
-        {#    {% if is_granted('ROLE_ADMIN') %} #}
-        {#        <div> #}
-        {#            <a href="{{ path('app_user_disable_many', {'users': users}) }}" class="btn btn-danger">Désactiver</a> #}
-        {#            <a href="{{ path('app_user_delete_many', {'users': users}) }}" class="btn btn-danger">Supprimer</a> #}
-        {#        </div> #}
-        {#    {% endif %} #}
 
         <a href="{{ path('home_home') }}" class="link-secondary">Retour à l'accueil</a>
     </div>
